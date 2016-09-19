@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+  	
+  <!-- DataSource -->
+
+  <bean id="jdbcConfiguration" class="org.hisp.quick.configuration.JdbcConfigurationFactoryBean">
+	<property name="dialectName" value="H2"/>
+	<property name="driverClass" value="org.h2.Driver"/>
+    <property name="connectionUrl" value="jdbc:h2:~/h2database/quick"/>
+    <property name="username" value="sa"/>
+    <property name="password" value=""/>
+  </bean>
+  
+  <!-- StatementManager -->
+	
+  <bean id="statementManager" class="org.hisp.quick.statement.JdbcStatementManager">
+    <property name="jdbcConfiguration" ref="jdbcConfiguration"/>
+  </bean>
+  
+  <!-- BatchHandlerFactory -->
+	
+  <bean id="batchHandlerFactory" class="org.hisp.quick.factory.DefaultBatchHandlerFactory">
+    <property name="jdbcConfiguration" ref="jdbcConfiguration"/>
+  </bean>
+  
+</beans>
