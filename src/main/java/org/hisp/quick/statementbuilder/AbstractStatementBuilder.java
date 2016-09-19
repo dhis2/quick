@@ -30,19 +30,21 @@ package org.hisp.quick.statementbuilder;
 
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.hisp.quick.StatementBuilder;
+import org.hisp.quick.batchhandler.AbstractBatchHandler;
 
 /**
  * @author Lars Helge Overland
  */
-public abstract class AbstractStatementBuilder
-    implements StatementBuilder
+public abstract class AbstractStatementBuilder<T>
+    implements StatementBuilder<T>
 {
+    protected AbstractBatchHandler<T> batchHandler = null;    
+    
     protected final String QUOTE = "'";
     protected final String NULL = "null";
     protected final String TRUE = "true";
@@ -50,104 +52,35 @@ public abstract class AbstractStatementBuilder
     protected final String SEPARATOR = ",";
     protected final String BRACKET_START = "(";
     protected final String BRACKET_END = ")";
-
-    protected String tableName = null;
-    
-    protected String autoIncrementColumn = null;
-    
-    protected List<String> identifierColums;
-    protected List<String> identifierValues;
-    
-    protected List<String> matchColumns;
-    protected List<String> matchValues;
-    
-    protected List<String> uniqueColumns;
-    protected List<String> uniqueValues;
-        
-    protected List<String> columns;
-    protected List<String> values;
     
     // -------------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------------
 
-    public AbstractStatementBuilder()
+    public AbstractStatementBuilder( AbstractBatchHandler<T> batchHandler )
     {
-        identifierColums = new ArrayList<String>();
-        identifierValues = new ArrayList<String>();
-        
-        uniqueColumns = new ArrayList<String>();
-        uniqueValues = new ArrayList<String>();
-        
-        matchColumns = new ArrayList<String>();
-        matchValues = new ArrayList<String>();
-        
-        columns = new ArrayList<String>();
-        values = new ArrayList<String>();
+        this.batchHandler = batchHandler;
     }
 
     // -------------------------------------------------------------------------
     // StatementBuilder implementation
     // -------------------------------------------------------------------------
 
-    public final void setTableName( String name )
-    {
-        this.tableName = name;
-    }
-
-    public final void setAutoIncrementColumn( String column )
-    {
-        this.autoIncrementColumn = column;
-    }
-    
-    public final void setIdentifierColumn( String column )
-    {
-        identifierColums.add( column );
-    }
-    
-    public final void setIdentifierValue( Object value )
-    {
-        identifierValues.add( defaultEncode( value ) );
-    }
-    
-    public final void setMatchColumn( String column )
-    {
-        matchColumns.add( column );
-    }
-    
-    public final void setMatchValue( Object value )
-    {
-        matchValues.add( defaultEncode( value ) );
-    }
-        
-    public final void setUniqueColumn( String column )
-    {
-        uniqueColumns.add( column );
-    }
-    
-    public final void setUniqueValue( Object value )
-    {
-        uniqueValues.add( defaultEncode( value ) );
-    }
-    
-    public final void setColumn( String column )
-    {
-        columns.add( column );
-    }
-    
-    public final void setValue( Object value )
-    {
-        values.add( defaultEncode( value ) );
-    }
-
+    @Override
     public String getNoColumnInsertStatementOpening()
     {
-        return "INSERT INTO " + tableName + " VALUES ";
+        return "INSERT INTO " + batchHandler.getTableName() + " VALUES ";
     }
 
-    public String getUpdateStatement()
+    @Override
+    public String getUpdateStatement( T object )
     {
-        final StringBuffer buffer = new StringBuffer( "UPDATE " + tableName + " SET " );
+        List<String> columns = batchHandler.getColumns();
+        List<Object> values = batchHandler.getValues( object );
+        List<String> identifierColums = batchHandler.getIdentifierColumns();
+        List<Object> identifierValues = batchHandler.getIdentifierValues( object );
+        
+        final StringBuffer buffer = new StringBuffer( "UPDATE " + batchHandler.getTableName() + " SET " );
         
         for ( int i = 0; i < columns.size(); i++ )
         {
@@ -179,10 +112,14 @@ public abstract class AbstractStatementBuilder
         return buffer.toString();
     }
 
-    public String getDeleteStatement()
+    @Override
+    public String getDeleteStatement( T object )
     {
+        List<String> identifierColums = batchHandler.getIdentifierColumns();
+        List<Object> identifierValues = batchHandler.getIdentifierValues( object );
+        
         final StringBuffer buffer = new StringBuffer().
-            append( "DELETE FROM " ).append( tableName ).append( " WHERE " );
+            append( "DELETE FROM " ).append( batchHandler.getTableName() ).append( " WHERE " );
         
         for ( int i = 0; i < identifierColums.size(); i++ )
         {
@@ -201,12 +138,15 @@ public abstract class AbstractStatementBuilder
         return buffer.toString();            
     }
     
-    public String getUniquenessStatement( boolean inclusive )
+    public String getUniquenessStatement( T object, boolean inclusive )
     {
+        List<String> uniqueColumns = batchHandler.getUniqueColumns();
+        List<Object> uniqueValues = batchHandler.getUniqueValues( object );
+        
         final String operator = inclusive ? " AND " : " OR ";
                 
         final StringBuffer buffer = new StringBuffer().
-            append( "SELECT " ).append( uniqueColumns.get( 0 ) ).append( " FROM " ).append( tableName ).append( " WHERE " );
+            append( "SELECT " ).append( uniqueColumns.get( 0 ) ).append( " FROM " ).append( batchHandler.getTableName() ).append( " WHERE " );
         
         for ( int i = 0; i < uniqueColumns.size(); i++ )
         {
@@ -223,21 +163,6 @@ public abstract class AbstractStatementBuilder
         return buffer.toString();
     }
         
-    public List<String> getUniqueValues()
-    {
-        List<String> list = new ArrayList<>( uniqueValues );
-        uniqueValues.clear();
-        return list;
-    }
-        
-    public void setMatchColumnToFirstUniqueColumn()
-    {
-        if ( uniqueColumns.size() > 0 )
-        {
-            matchColumns.add( 0, uniqueColumns.get( 0 ) );
-        }
-    }
-    
     // -------------------------------------------------------------------------
     // Supportive methods
     // -------------------------------------------------------------------------

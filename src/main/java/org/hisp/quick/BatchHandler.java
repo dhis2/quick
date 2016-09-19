@@ -51,16 +51,7 @@ public interface BatchHandler<T>
      * @return jdbc configuration.
      */
     JdbcConfiguration getConfiguration();
-    
-    /**
-     * Used to set table name for generic BatchHandlers, a typical implementation
-     * will set this property itself.
-     * 
-     * @param name the name of the database table.
-     * @return this batch handler.
-     */
-    BatchHandler<T> setTableName( String name );
-    
+        
     /**
      * Adds an object to the BatchHandler. Checks if the value is a duplicate,
      * i.e. already added, before adding.

@@ -32,6 +32,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -63,7 +65,7 @@ public abstract class AbstractBatchHandler<T>
     
     private Statement statement;
     
-    protected StatementBuilder statementBuilder;
+    protected StatementBuilder<T> statementBuilder;
         
     private StringBuffer addObjectSqlBuffer;
     
@@ -85,7 +87,7 @@ public abstract class AbstractBatchHandler<T>
     protected AbstractBatchHandler( JdbcConfiguration configuration, boolean uniqueColumnsAreInclusive )
     {
         this.configuration = configuration;
-        this.statementBuilder = StatementBuilderFactory.createStatementBuilder( configuration.getDialect() );
+        this.statementBuilder = StatementBuilderFactory.createStatementBuilder( configuration.getDialect(), this );
         this.uniqueColumnsAreInclusive = uniqueColumnsAreInclusive;
     }
 
@@ -111,15 +113,8 @@ public abstract class AbstractBatchHandler<T>
             this.addObjectStatementCount = 0;
             
             statement = connection.createStatement();
-            
-            setTableName();
-            setAutoIncrementColumn();
-            setIdentifierColumns();
-            setUniqueColumns();
-            setMatchColumns();
-            setColumns();
                         
-            this.addObjectSqlBuffer.append( getInsertStatementOpening() ); // Initial opening for addObject
+            this.addObjectSqlBuffer.append( statementBuilder.getInsertStatementOpening() ); // Initial opening for addObject
             
             return this;
         }
@@ -138,19 +133,9 @@ public abstract class AbstractBatchHandler<T>
     }
 
     @Override
-    public BatchHandler<T> setTableName( String name )
-    {
-        statementBuilder.setTableName( name );
-        
-        return this;
-    }
-
-    @Override
     public final boolean addObject( T object )
-    {
-        setUniqueValues( object );
-        
-        List<String> uniqueList = statementBuilder.getUniqueValues();
+    {        
+        List<Object> uniqueList = getUniqueValues( object );
         
         String uniqueKey = StringUtils.collectionToCommaDelimitedString( uniqueList );
         
@@ -162,10 +147,8 @@ public abstract class AbstractBatchHandler<T>
             
             return false;
         }
-
-        setValues( object );
         
-        addObjectSqlBuffer.append( statementBuilder.getInsertStatementValues() );        
+        addObjectSqlBuffer.append( statementBuilder.getInsertStatementValues( object ) );        
         
         addObjectStatementCount++;
         
@@ -179,7 +162,7 @@ public abstract class AbstractBatchHandler<T>
                 
                 log.debug( "Add SQL: " + addObjectSqlBuffer );
                                 
-                addObjectSqlBuffer = new StringBuffer( MAX_LENGTH ).append( getInsertStatementOpening() );
+                addObjectSqlBuffer = new StringBuffer( MAX_LENGTH ).append( statementBuilder.getInsertStatementOpening() );
                 
                 addObjectStatementCount = 0;
                 
@@ -201,11 +184,7 @@ public abstract class AbstractBatchHandler<T>
     @Override
     public final void updateObject( T object )
     {        
-        setIdentifierValues( object );
-        
-        setValues( object );
-        
-        final String sql = statementBuilder.getUpdateStatement();
+        final String sql = statementBuilder.getUpdateStatement( object );
         
         log.debug( "Update SQL: " + sql );
         
@@ -225,10 +204,8 @@ public abstract class AbstractBatchHandler<T>
 
     @Override
     public final void deleteObject( T object )
-    {
-        setIdentifierValues( object );
-        
-        final String sql = statementBuilder.getDeleteStatement();
+    {        
+        final String sql = statementBuilder.getDeleteStatement( object );
         
         log.debug( "Delete SQL: " + sql );
         
@@ -249,9 +226,7 @@ public abstract class AbstractBatchHandler<T>
     @Override
     public final boolean objectExists( T object )
     {        
-        setUniqueValues( object );
-        
-        final String sql = statementBuilder.getUniquenessStatement( uniqueColumnsAreInclusive );
+        final String sql = statementBuilder.getUniquenessStatement( object, uniqueColumnsAreInclusive );
         
         log.debug( "Unique SQL: " + sql );
         
@@ -330,52 +305,33 @@ public abstract class AbstractBatchHandler<T>
         }
     }
     
-    // -------------------------------------------------------------------------
-    // Override set-methods
-    // -------------------------------------------------------------------------
-
-    protected void setAutoIncrementColumn()
-    {   
-    }
-    
-    protected void setIdentifierColumns()
-    {   
-    }
-    
-    protected void setIdentifierValues( T object )
-    {   
-    }
-
-    protected void setMatchColumns()
+    protected List<String> getStringList( String... values )
     {
-        statementBuilder.setMatchColumnToFirstUniqueColumn();
+        return new ArrayList<String>( Arrays.asList( values ) );
     }
-
-    protected void setMatchValues( Object object )
+    
+    protected List<Object> getObjectList( Object... values )
     {
-        statementBuilder.setMatchValue( object );
+        return new ArrayList<Object>( Arrays.asList( values ) );
     }
     
     // -------------------------------------------------------------------------
-    // Override get-methods
+    // Abstract get methods
     // -------------------------------------------------------------------------
 
-    protected String getInsertStatementOpening()
-    {
-        return statementBuilder.getInsertStatementOpening();
-    }
-    
-    // -------------------------------------------------------------------------
-    // Abstract set-methods
-    // -------------------------------------------------------------------------
+    public abstract String getTableName();
 
-    protected abstract void setTableName();
+    public abstract String getAutoIncrementColumn();
     
-    protected abstract void setUniqueColumns();
+    public abstract List<String> getIdentifierColumns();
     
-    protected abstract void setUniqueValues( T object );
+    public abstract List<Object> getIdentifierValues( T object );
+
+    public abstract List<String> getUniqueColumns();
     
-    protected abstract void setColumns();
+    public abstract List<Object> getUniqueValues( T object );
+
+    public abstract List<String> getColumns();
     
-    protected abstract void setValues( T object );
+    public abstract List<Object> getValues( T object );
 }

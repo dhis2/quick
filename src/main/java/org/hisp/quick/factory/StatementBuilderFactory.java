@@ -30,6 +30,7 @@ package org.hisp.quick.factory;
 
 import org.hisp.quick.StatementBuilder;
 import org.hisp.quick.StatementDialect;
+import org.hisp.quick.batchhandler.AbstractBatchHandler;
 import org.hisp.quick.statementbuilder.DerbyStatementBuilder;
 import org.hisp.quick.statementbuilder.H2StatementBuilder;
 import org.hisp.quick.statementbuilder.HsqlStatementBuilder;
@@ -45,29 +46,30 @@ public class StatementBuilderFactory
      * Creates a StatementBuilder instance.
      * 
      * @param dialect the dialect of the StatementBuilder to create.
+     * @param batchHandler the batch handler.
      * @return a StatementBuilder instance.
      */
-    public static StatementBuilder createStatementBuilder( StatementDialect dialect )
+    public static <T> StatementBuilder<T> createStatementBuilder( StatementDialect dialect, AbstractBatchHandler<T> batchHandler )
     {
         if ( dialect.equals( StatementDialect.MYSQL ) )
         {
-            return new MySqlStatementBuilder();
+            return new MySqlStatementBuilder<T>( batchHandler );
         }
         else if ( dialect.equals( StatementDialect.POSTGRESQL ) )
         {
-            return new PostgreSqlStatementBuilder();
+            return new PostgreSqlStatementBuilder<T>( batchHandler );
         }
         else if ( dialect.equals( StatementDialect.H2 ) )
         {
-            return new H2StatementBuilder();
+            return new H2StatementBuilder<T>( batchHandler );
         }
         else if ( dialect.equals( StatementDialect.HSQL ) )
         {
-            return new HsqlStatementBuilder();
+            return new HsqlStatementBuilder<T>( batchHandler );
         }
         else if ( dialect.equals( StatementDialect.DERBY ) )
         {
-            return new DerbyStatementBuilder();
+            return new DerbyStatementBuilder<T>( batchHandler );
         }
         else
         {

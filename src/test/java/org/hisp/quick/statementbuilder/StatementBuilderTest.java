@@ -29,7 +29,13 @@ package org.hisp.quick.statementbuilder;
  */
 
 import org.hisp.quick.StatementBuilder;
+import org.hisp.quick.StatementDialect;
+import org.hisp.quick.batchhandler.AbstractBatchHandler;
+import org.hisp.quick.model.DataValue;
+import org.hisp.quick.model.DataValueBatchHandler;
 import org.junit.Test;
+
+import org.hisp.quick.JdbcConfiguration;
 
 import static org.junit.Assert.*;
 
@@ -41,22 +47,14 @@ public class StatementBuilderTest
     @Test
     public void test()
     {
-        StatementBuilder builder = new PostgreSqlStatementBuilder();
+        String expectedInsert = "INSERT INTO datavalue (what,where,when,value) VALUES ";
         
-        builder.setTableName( "element" );
-        builder.setAutoIncrementColumn( "id" );
-        builder.setIdentifierColumn( "id" );
+        JdbcConfiguration jdbcConfig = new JdbcConfiguration( StatementDialect.POSTGRESQL, "driverClass", "connectionUrl", "username", "password" );
         
-        builder.setUniqueColumn( "name" );
-        builder.setUniqueValue( "johns' element" );
+        AbstractBatchHandler<DataValue> batchHandler = new DataValueBatchHandler( jdbcConfig );
         
-        builder.setColumn( "name" );
-        builder.setColumn( "type" );        
-        builder.setValue( "johns' element" );
-        builder.setValue( "hard /ware" );
+        StatementBuilder<DataValue> builder = new PostgreSqlStatementBuilder<DataValue>( batchHandler );
         
-        assertEquals( "INSERT INTO element (id,name,type) VALUES ", builder.getInsertStatementOpening() );
-        assertEquals( "(nextval('hibernate_sequence'),'johns'' element','hard /ware'),", builder.getInsertStatementValues() );
-        assertEquals( "SELECT name FROM element WHERE name='johns'' element'", builder.getUniquenessStatement( true ) );
+        assertEquals( expectedInsert, builder.getInsertStatementOpening() );
     }
 }

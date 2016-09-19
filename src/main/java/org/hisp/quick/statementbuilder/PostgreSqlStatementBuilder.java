@@ -1,5 +1,9 @@
 package org.hisp.quick.statementbuilder;
 
+import java.util.List;
+
+import org.hisp.quick.batchhandler.AbstractBatchHandler;
+
 /*
  * Copyright (c) 2004-2016, University of Oslo
  * All rights reserved.
@@ -31,8 +35,8 @@ package org.hisp.quick.statementbuilder;
 /**
  * @author Lars Helge Overland
  */
-public class PostgreSqlStatementBuilder
-    extends AbstractStatementBuilder
+public class PostgreSqlStatementBuilder<T>
+    extends AbstractStatementBuilder<T>
 {
     private static final String AUTO_INCREMENT = "nextval('hibernate_sequence')";
     
@@ -40,9 +44,9 @@ public class PostgreSqlStatementBuilder
     // Constructor
     // -------------------------------------------------------------------------
  
-    public PostgreSqlStatementBuilder()
+    public PostgreSqlStatementBuilder( AbstractBatchHandler<T> batchHandler )
     {
-        super();
+        super( batchHandler );
     }    
 
     // -------------------------------------------------------------------------
@@ -52,9 +56,12 @@ public class PostgreSqlStatementBuilder
     @Override
     public String getInsertStatementOpening()
     {
+        String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
+        List<String> columns = batchHandler.getColumns();
+        
         final StringBuffer buffer = new StringBuffer();
         
-        buffer.append( "INSERT INTO " + tableName + " (" );
+        buffer.append( "INSERT INTO " + batchHandler.getTableName() + " (" );
 
         if ( autoIncrementColumn != null )
         {
@@ -77,8 +84,11 @@ public class PostgreSqlStatementBuilder
     }
 
     @Override
-    public String getInsertStatementValues()
+    public String getInsertStatementValues( T object )
     {
+        String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
+        List<Object> values = batchHandler.getValues( object );
+        
         final StringBuffer buffer = new StringBuffer();
         
         buffer.append( BRACKET_START );
@@ -88,7 +98,7 @@ public class PostgreSqlStatementBuilder
             buffer.append( AUTO_INCREMENT + SEPARATOR );
         }
         
-        for ( String value : values )
+        for ( Object value : values )
         {
             buffer.append( value + SEPARATOR );
         }

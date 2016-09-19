@@ -28,6 +28,7 @@ package org.hisp.quick.model;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import java.util.List;
 import org.hisp.quick.JdbcConfiguration;
 import org.hisp.quick.batchhandler.AbstractBatchHandler;
 
@@ -37,65 +38,55 @@ import org.hisp.quick.batchhandler.AbstractBatchHandler;
 public class DataValueBatchHandler
     extends AbstractBatchHandler<DataValue>
 {
-
     public DataValueBatchHandler( JdbcConfiguration config )
     {
         super( config, true );
     }
 
     @Override
-    protected void setTableName()
+    public String getTableName()
     {
-        statementBuilder.setTableName( "datavalue" );
+        return "datavalue";
+    }
+    
+    public String getAutoIncrementColumn()
+    {
+        return null;
     }
 
     @Override
-    protected void setIdentifierColumns()
+    public List<String> getIdentifierColumns()
     {
-        statementBuilder.setIdentifierColumn( "what" );
-        statementBuilder.setIdentifierColumn( "where" );
-        statementBuilder.setIdentifierColumn( "when" );
+        return getStringList( "what", "where", "when" );
     }
 
     @Override
-    protected void setIdentifierValues( DataValue value )
-    {        
-        statementBuilder.setIdentifierValue( value.getWhat() );
-        statementBuilder.setIdentifierValue( value.getWhere() );
-        statementBuilder.setIdentifierValue( value.getWhen() );
-    }
-    
-    @Override
-    protected void setUniqueColumns()
+    public List<Object> getIdentifierValues( DataValue value )
     {
-        statementBuilder.setUniqueColumn( "what" );
-        statementBuilder.setUniqueColumn( "where" );
-        statementBuilder.setUniqueColumn( "when" );
+        return getObjectList( value.getWhat(), value.getWhere(), value.getWhen() );
     }
     
     @Override
-    protected void setUniqueValues( DataValue value )
-    {        
-        statementBuilder.setUniqueValue( value.getWhat() );
-        statementBuilder.setUniqueValue( value.getWhere() );
-        statementBuilder.setUniqueValue( value.getWhen() );
-    }
-    
-    @Override
-    protected void setColumns()
+    public List<String> getUniqueColumns()
     {
-        statementBuilder.setColumn( "what" );
-        statementBuilder.setColumn( "where" );
-        statementBuilder.setColumn( "when" );
-        statementBuilder.setColumn( "value" );
+        return getStringList( "what", "where", "when" );
     }
     
     @Override
-    protected void setValues( DataValue value )
+    public List<Object> getUniqueValues( DataValue value )
+    {
+        return getObjectList( value.getWhat(), value.getWhere(), value.getWhen() );
+    }
+    
+    @Override
+    public List<String> getColumns()
+    {
+        return getStringList( "what", "where", "when", "value" );
+    }
+    
+    @Override
+    public List<Object> getValues( DataValue value )
     {        
-        statementBuilder.setValue( value.getWhat() );
-        statementBuilder.setValue( value.getWhere() );
-        statementBuilder.setValue( value.getWhen() );
-        statementBuilder.setValue( value.getValue() );
+        return getObjectList( value.getWhat(), value.getWhere(), value.getWhen(), value.getValue() );
     }
 }

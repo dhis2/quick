@@ -28,11 +28,15 @@ package org.hisp.quick.statementbuilder;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import java.util.List;
+
+import org.hisp.quick.batchhandler.AbstractBatchHandler;
+
 /**
  * @author Lars Helge Overland
  */
-public class DerbyStatementBuilder
-    extends AbstractStatementBuilder
+public class DerbyStatementBuilder<T>
+    extends AbstractStatementBuilder<T>
 {
     private static final String AUTO_INCREMENT = "default";
     
@@ -40,9 +44,9 @@ public class DerbyStatementBuilder
     // Constructor
     // -------------------------------------------------------------------------
     
-    public DerbyStatementBuilder()
+    public DerbyStatementBuilder( AbstractBatchHandler<T> batchHandler )
     {
-        super();
+        super( batchHandler );
     }
 
     // -------------------------------------------------------------------------
@@ -52,9 +56,12 @@ public class DerbyStatementBuilder
     @Override
     public String getInsertStatementOpening()
     {
+        String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
+        List<String> columns = batchHandler.getColumns();
+        
         final StringBuffer buffer = new StringBuffer();
         
-        buffer.append( "INSERT INTO " + tableName + " (" );
+        buffer.append( "INSERT INTO " + batchHandler.getTableName() + " (" );
 
         if ( autoIncrementColumn != null )
         {
@@ -77,8 +84,11 @@ public class DerbyStatementBuilder
     }
 
     @Override
-    public String getInsertStatementValues()
+    public String getInsertStatementValues( T object )
     {
+        String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
+        List<Object> values = batchHandler.getValues( object );
+        
         final StringBuffer buffer = new StringBuffer();
         
         buffer.append( BRACKET_START );
@@ -88,7 +98,7 @@ public class DerbyStatementBuilder
             buffer.append( AUTO_INCREMENT + SEPARATOR );
         }
         
-        for ( String value : values )
+        for ( Object value : values )
         {
             buffer.append( value + SEPARATOR );
         }

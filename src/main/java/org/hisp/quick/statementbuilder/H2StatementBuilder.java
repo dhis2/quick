@@ -1,5 +1,9 @@
 package org.hisp.quick.statementbuilder;
 
+import java.util.List;
+
+import org.hisp.quick.batchhandler.AbstractBatchHandler;
+
 /*
  * Copyright (c) 2004-2016, University of Oslo
  * All rights reserved.
@@ -31,16 +35,16 @@ package org.hisp.quick.statementbuilder;
 /**
  * @author Lars Helge Overland
  */
-public class H2StatementBuilder
-    extends AbstractStatementBuilder
+public class H2StatementBuilder<T>
+    extends AbstractStatementBuilder<T>
 {
     // -------------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------------
 
-    public H2StatementBuilder()
+    public H2StatementBuilder( AbstractBatchHandler<T> batchHandler )
     {
-        super();
+        super( batchHandler );
     }    
 
     // -------------------------------------------------------------------------
@@ -50,9 +54,11 @@ public class H2StatementBuilder
     @Override
     public String getInsertStatementOpening()
     {
+        List<String> columns = batchHandler.getColumns();
+        
         final StringBuffer buffer = new StringBuffer();
         
-        buffer.append( "INSERT INTO " + tableName + " (" );
+        buffer.append( "INSERT INTO " + batchHandler.getTableName() + " (" );
         
         for ( String column : columns )
         {
@@ -70,13 +76,15 @@ public class H2StatementBuilder
     }
 
     @Override
-    public String getInsertStatementValues()
+    public String getInsertStatementValues( T object )
     {
+        List<Object> values = batchHandler.getValues( object );
+        
         final StringBuffer buffer = new StringBuffer();
         
         buffer.append( BRACKET_START );
         
-        for ( String value : values )
+        for ( Object value : values )
         {
             buffer.append( value + SEPARATOR );
         }
