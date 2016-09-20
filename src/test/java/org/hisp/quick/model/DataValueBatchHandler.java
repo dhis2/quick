@@ -56,7 +56,7 @@ public class DataValueBatchHandler
     }
 
     @Override
-    public boolean isInclusiveIdentifierColumns()
+    public boolean isInclusiveUniqueColumns()
     {
         return true;
     }

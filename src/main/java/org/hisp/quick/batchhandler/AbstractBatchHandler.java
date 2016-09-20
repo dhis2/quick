@@ -347,12 +347,12 @@ public abstract class AbstractBatchHandler<T>
      * Returns the database auto-increment column name, null if none.
      */
     public abstract String getAutoIncrementColumn();
-    
+
     /**
      * Indicates whether rows are unique across all unique columns (inclusive)
      * or unique for each individual unique column (exclusive).
      */
-    public abstract boolean isInclusiveIdentifierColumns();
+    public abstract boolean isInclusiveUniqueColumns();
     
     /**
      * Returns a list of primary key column names.

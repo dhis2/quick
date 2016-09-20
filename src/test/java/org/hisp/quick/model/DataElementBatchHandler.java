@@ -57,7 +57,7 @@ public class DataElementBatchHandler
     }
 
     @Override
-    public boolean isInclusiveIdentifierColumns()
+    public boolean isInclusiveUniqueColumns()
     {
         return false;
     }

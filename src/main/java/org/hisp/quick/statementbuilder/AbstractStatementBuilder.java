@@ -136,7 +136,7 @@ public abstract class AbstractStatementBuilder<T>
     {
         List<String> uniqueColumns = batchHandler.getUniqueColumns();
         List<Object> uniqueValues = batchHandler.getUniqueValues( object );
-        boolean inclusive = batchHandler.isInclusiveIdentifierColumns();
+        boolean inclusive = batchHandler.isInclusiveUniqueColumns();
                 
         final String operator = inclusive ? " and " : " or ";
                 
