@@ -94,9 +94,7 @@ public abstract class AbstractBatchHandler<T>
     // -------------------------------------------------------------------------
     // BatchHandler implementation
     // -------------------------------------------------------------------------
-    
-    //TODO call init from factory
-    
+        
     @Override
     public final BatchHandler<T> init()
     {
