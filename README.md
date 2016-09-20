@@ -18,7 +18,7 @@ Quick requires that JDBC connection information is specified for the JdbcConfigu
 </bean>
 ```
 
-### Statement manager
+### StatementManager
 The StatementManager interface provides methods for performing batch operations against a single JDBC connection and statement.
 
 ```xml
@@ -27,7 +27,7 @@ The StatementManager interface provides methods for performing batch operations 
 </bean>
 ```
 
-### Batch handler factory
+### BatchHandlerFactory
 The BatchHandlerFactory provides generation of BatchHandler instances which allows for performing batch insert operations for objects.
 
 ```xml
