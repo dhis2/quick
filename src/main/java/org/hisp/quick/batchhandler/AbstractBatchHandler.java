@@ -224,7 +224,12 @@ public abstract class AbstractBatchHandler<T>
 
     @Override
     public final boolean objectExists( T object )
-    {        
+    {
+        if ( getUniqueColumns() == null || getUniqueColumns().isEmpty() )
+        {
+            return false;
+        }
+        
         final String sql = statementBuilder.getUniquenessStatement( object );
         
         log.debug( "Unique SQL: " + sql );
