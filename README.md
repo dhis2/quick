@@ -37,7 +37,10 @@ BatchHandler<DataElement> batchHandler = batchHandlerFactory
 
 for ( DataElement dataElement : dataElements )
 {
-  batchHandler.addObject( dataElement ); // Will batch and flush automatically
+  if ( !batchHandler.objectExists( dataElement )
+  {
+    batchHandler.addObject( dataElement ); // Will batch and flush automatically
+  }
 }
 
 batchHandler.flush(); // Flush remaining objects to database
