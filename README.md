@@ -24,6 +24,24 @@ for ( int i = 0; i < 10; i++ )
 statementManager.destroy();
 ```
 
+## BatchHandler
+
+The BatchHandler interface allows for batch insert operations and high-performance SQL operations. You can subclass the AbstractBatchHandler class and create implementations for your data objects. Example usage:
+
+```java
+@Autowired
+BatchHandlerFactory batchHandlerFactory;
+
+BatchHandler<DataElement> batchHandler = batchHandlerFactory.createBatchHandler( DataElement.class ).init();
+
+for ( DataElement dataElement : dataElements )
+{
+  batchHandler.addObject( dataElement ); // Will batch and flush automatically
+}
+
+batchHandler.flush(); // Flush remaining objects to database
+```
+
 ## Spring configuration
 Quick components can easily be configured in Spring and used as Spring managed beans.
 
