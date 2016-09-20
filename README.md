@@ -2,7 +2,7 @@
 
 Quick is a Java framework for high-performance JDBC batch operations.
 
-View the [Javaodc](http://ci.dhis2.org/job/quick-javadoc/javadoc/]).
+View the [Javadoc](http://ci.dhis2.org/job/quick-javadoc/javadoc/]).
 
 ## StatementManager and StatementHolder
 
