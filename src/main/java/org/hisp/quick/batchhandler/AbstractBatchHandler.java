@@ -302,14 +302,34 @@ public abstract class AbstractBatchHandler<T>
         }
     }
     
-    protected List<String> getStringList( String... values )
+    /**
+     * Returns a List of String items.
+     * 
+     * @param items the items.
+     * @return a List of String items.
+     */
+    protected List<String> getStringList( String... items )
     {
-        return new ArrayList<String>( Arrays.asList( values ) );
+        return new ArrayList<String>( Arrays.asList( items ) );
+    }
+
+    /**
+     * Returns a List of Object items.
+     * 
+     * @param items the items.
+     * @return a List of Object items.
+     */
+    protected List<Object> getObjectList( Object... items )
+    {
+        return new ArrayList<Object>( Arrays.asList( items ) );
     }
     
-    protected List<Object> getObjectList( Object... values )
+    /**
+     * Use for testing purposes only.
+     */
+    protected String getAddObjectSql()
     {
-        return new ArrayList<Object>( Arrays.asList( values ) );
+        return addObjectSqlBuffer.toString();
     }
     
     // -------------------------------------------------------------------------

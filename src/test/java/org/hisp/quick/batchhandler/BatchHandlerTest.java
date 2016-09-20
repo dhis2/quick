@@ -33,17 +33,12 @@ import org.hisp.quick.model.DataValue;
 import org.hisp.quick.model.DataValueBatchHandler;
 import org.hisp.quick.statement.JdbcStatementManager;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.*;
 
 /**
  * @author Lars Helge Overland
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath*:/META-INF/beans.xml"})
 public class BatchHandlerTest
 {
     @Test
