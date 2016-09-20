@@ -61,7 +61,7 @@ public interface StatementBuilder<T>
     /**
      * Creates a select SQL statement.
      * 
-     * @param object the argument object.
+     * @param arg the argument object.
      * @return a select SQL statement.
      */
     String getSelectStatement( T arg );

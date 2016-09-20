@@ -442,10 +442,11 @@ public abstract class AbstractBatchHandler<T>
     public abstract List<Object> getValues( T object );
     
     /**
-     * Maps a ResultSet row to an object <T>.
+     * Maps a ResultSet row to an object T.
      * 
      * @param resultSet the result set.
-     * @return an object <T>.
+     * @return an object T.
+     * @throws SQLException if SQL operation failed.
      */
     public abstract T mapRow( ResultSet resultSet )
         throws SQLException;
