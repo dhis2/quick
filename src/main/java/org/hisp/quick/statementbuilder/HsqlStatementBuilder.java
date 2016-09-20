@@ -70,9 +70,7 @@ public class HsqlStatementBuilder<T>
             buffer.deleteCharAt( buffer.length() - 1 );
         }
         
-        buffer.append( BRACKET_END + " values " );
-                
-        return buffer.toString();
+        return buffer.append( BRACKET_END + " values " ).toString();
     }
 
     @Override
@@ -94,9 +92,7 @@ public class HsqlStatementBuilder<T>
             buffer.deleteCharAt( buffer.length() - 1 );
         }
         
-        buffer.append( BRACKET_END + SEPARATOR );
-                
-        return buffer.toString();
+        return buffer.append( BRACKET_END + SEPARATOR ).toString();
     }
 
     @Override

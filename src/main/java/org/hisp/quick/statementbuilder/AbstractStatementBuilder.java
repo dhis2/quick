@@ -104,9 +104,7 @@ public abstract class AbstractStatementBuilder<T>
             }
         }
         
-        buffer.append( ";" );
-        
-        return buffer.toString();
+        return buffer.append( ";" ).toString();
     }
 
     @Override
@@ -127,21 +125,20 @@ public abstract class AbstractStatementBuilder<T>
                 buffer.append( " and " );
             }
         }
-
-        buffer.append( ";" );
         
-        return buffer.toString();            
+        return buffer.append( ";" ).toString();            
     }
     
-    public String getUniquenessStatement( T object, boolean inclusive )
+    public String getUniquenessStatement( T object )
     {
         List<String> uniqueColumns = batchHandler.getUniqueColumns();
         List<Object> uniqueValues = batchHandler.getUniqueValues( object );
-        
+        boolean inclusive = batchHandler.isInclusiveIdentifierColumns();
+                
         final String operator = inclusive ? " and " : " or ";
                 
-        final StringBuffer buffer = new StringBuffer().
-            append( "select " ).append( uniqueColumns.get( 0 ) ).append( " from " ).append( batchHandler.getTableName() ).append( " where " );
+        final StringBuffer buffer = new StringBuffer( "select 1 from " )
+            .append( batchHandler.getTableName() ).append( " where " );
         
         for ( int i = 0; i < uniqueColumns.size(); i++ )
         {
@@ -153,7 +150,7 @@ public abstract class AbstractStatementBuilder<T>
             }
         }
                 
-        return buffer.toString();
+        return buffer.append( ";" ).toString();
     }
         
     // -------------------------------------------------------------------------

@@ -41,7 +41,7 @@ public class DataElementBatchHandler
 {
     public DataElementBatchHandler( JdbcConfiguration config )
     {
-        super( config, true );
+        super( config );
     }
     
     @Override
@@ -54,6 +54,12 @@ public class DataElementBatchHandler
     public String getAutoIncrementColumn()
     {
         return "id";
+    }
+
+    @Override
+    public boolean isInclusiveIdentifierColumns()
+    {
+        return false;
     }
 
     @Override

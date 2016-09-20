@@ -85,12 +85,9 @@ public interface StatementBuilder<T>
      * columns / values are set. Clears unique values.
      * 
      * @param object the object.
-     * @param inclusive defines whether the unique properties are inclusive or 
-     *        exclusive, implying whether all or any must be equal for the object 
-     *        to be equal.
      * @return a select SQL statement.
      */
-    String getUniquenessStatement( T object, boolean inclusive );
+    String getUniquenessStatement( T object );
     
     /**
      * Returns the name of a SQL double column type.

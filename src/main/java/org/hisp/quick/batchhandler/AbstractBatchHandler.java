@@ -72,8 +72,6 @@ public abstract class AbstractBatchHandler<T>
     private final Set<String> uniqueObjects = new HashSet<>();
     
     private int addObjectStatementCount = 0;
-        
-    private boolean uniqueColumnsAreInclusive = false;
     
     // -------------------------------------------------------------------------
     // Constructor
@@ -84,11 +82,10 @@ public abstract class AbstractBatchHandler<T>
     {   
     }
     
-    protected AbstractBatchHandler( JdbcConfiguration configuration, boolean uniqueColumnsAreInclusive )
+    protected AbstractBatchHandler( JdbcConfiguration configuration )
     {
         this.configuration = configuration;
         this.statementBuilder = StatementBuilderFactory.createStatementBuilder( configuration.getDialect(), this );
-        this.uniqueColumnsAreInclusive = uniqueColumnsAreInclusive;
     }
 
     // -------------------------------------------------------------------------
@@ -226,7 +223,7 @@ public abstract class AbstractBatchHandler<T>
     @Override
     public final boolean objectExists( T object )
     {        
-        final String sql = statementBuilder.getUniquenessStatement( object, uniqueColumnsAreInclusive );
+        final String sql = statementBuilder.getUniquenessStatement( object );
         
         log.debug( "Unique SQL: " + sql );
         
@@ -322,6 +319,8 @@ public abstract class AbstractBatchHandler<T>
     public abstract String getTableName();
 
     public abstract String getAutoIncrementColumn();
+    
+    public abstract boolean isInclusiveIdentifierColumns();
     
     public abstract List<String> getIdentifierColumns();
     

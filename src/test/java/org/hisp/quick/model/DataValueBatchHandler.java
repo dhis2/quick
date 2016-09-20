@@ -40,7 +40,7 @@ public class DataValueBatchHandler
 {
     public DataValueBatchHandler( JdbcConfiguration config )
     {
-        super( config, true );
+        super( config );
     }
 
     @Override
@@ -48,10 +48,17 @@ public class DataValueBatchHandler
     {
         return "datavalue";
     }
-    
+
+    @Override
     public String getAutoIncrementColumn()
     {
         return null;
+    }
+
+    @Override
+    public boolean isInclusiveIdentifierColumns()
+    {
+        return true;
     }
 
     @Override

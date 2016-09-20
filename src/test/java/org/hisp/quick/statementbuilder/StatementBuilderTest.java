@@ -55,6 +55,9 @@ public class StatementBuilderTest
         String expInsertNoColumn = "insert into datavalue values ";
         String expInsertStatementValues = "(1,2,3,'ValueA'),";
         String expUpdateStatement = "update datavalue set what=1,where=2,when=3,value='ValueA' where what=1 and where=2 and when=3;";
+        String expDeleteStatement = "delete from datavalue where what=1 and where=2 and when=3;";
+        String expUniquenessStatment = "select 1 from datavalue where what=1 and where=2 and when=3;";
+        String expDouble = "double precision";
 
         AbstractBatchHandler<DataValue> batchHandler = new DataValueBatchHandler( postgreSqlJdbcConfig );
         
@@ -66,6 +69,9 @@ public class StatementBuilderTest
         assertEquals( expInsertNoColumn, builder.getNoColumnInsertStatementOpening() );
         assertEquals( expInsertStatementValues, builder.getInsertStatementValues( dvA ) );
         assertEquals( expUpdateStatement, builder.getUpdateStatement( dvA ) );
+        assertEquals( expDeleteStatement, builder.getDeleteStatement( dvA ) );
+        assertEquals( expUniquenessStatment, builder.getUniquenessStatement( dvA ) );
+        assertEquals( expDouble, builder.getDoubleColumnType() );
     }
     
     @Test
@@ -74,15 +80,25 @@ public class StatementBuilderTest
         String expInsert = "insert into dataelement (id,code,name,description) values ";
         String expInsertNoColumn = "insert into dataelement values ";
         String expInsertStatementValues = "(nextval('hibernate_sequence'),'CodeA','NameA','DescriptionA'),";
+        String expUpdateStatement = "update dataelement set code='CodeB',name='NameB',description='DescriptionB' where id=1;";
+        String expDeleteStatement = "delete from dataelement where id=1;";
+        String expUniquenessStatment = "select 1 from dataelement where code='CodeB';";
+        String expDouble = "double precision";
         
         AbstractBatchHandler<DataElement> batchHandler = new DataElementBatchHandler( postgreSqlJdbcConfig );
 
         StatementBuilder<DataElement> builder = new PostgreSqlStatementBuilder<>( batchHandler );
         
         DataElement deA = new DataElement( "CodeA", "NameA", "DescriptionA" );
+        DataElement deB = new DataElement( "CodeB", "NameB", "DescriptionB" );
+        deB.setId( 1 );
 
         assertEquals( expInsert, builder.getInsertStatementOpening() );
         assertEquals( expInsertNoColumn, builder.getNoColumnInsertStatementOpening() );
         assertEquals( expInsertStatementValues, builder.getInsertStatementValues( deA ) );
+        assertEquals( expUpdateStatement, builder.getUpdateStatement( deB ) );
+        assertEquals( expDeleteStatement, builder.getDeleteStatement( deB ) );
+        assertEquals( expUniquenessStatment, builder.getUniquenessStatement( deB ) );
+        assertEquals( expDouble, builder.getDoubleColumnType() );
     }
 }
