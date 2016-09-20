@@ -69,7 +69,7 @@ public abstract class AbstractStatementBuilder<T>
     @Override
     public String getNoColumnInsertStatementOpening()
     {
-        return "INSERT INTO " + batchHandler.getTableName() + " VALUES ";
+        return "insert into " + batchHandler.getTableName() + " values ";
     }
 
     @Override
@@ -80,11 +80,11 @@ public abstract class AbstractStatementBuilder<T>
         List<String> identifierColums = batchHandler.getIdentifierColumns();
         List<Object> identifierValues = batchHandler.getIdentifierValues( object );
         
-        final StringBuffer buffer = new StringBuffer( "UPDATE " + batchHandler.getTableName() + " SET " );
+        final StringBuffer buffer = new StringBuffer( "update " + batchHandler.getTableName() + " set " );
         
         for ( int i = 0; i < columns.size(); i++ )
         {
-            buffer.append( columns.get( i ) + "=" + values.get( i ) );
+            buffer.append( columns.get( i ) + "=" + defaultEncode( values.get( i ) ) );
             
             if ( i + 1 < columns.size() )
             {
@@ -92,22 +92,19 @@ public abstract class AbstractStatementBuilder<T>
             }
         }
         
-        buffer.append( " WHERE " );
+        buffer.append( " where " );
         
         for ( int i = 0; i < identifierColums.size(); i++ )
         {
-            buffer.append( identifierColums.get( i ) + "=" + identifierValues.get( i ) );
+            buffer.append( identifierColums.get( i ) + "=" + defaultEncode( identifierValues.get( i ) ) );
             
             if ( ( i + 1 ) < identifierColums.size() )
             {
-                buffer.append( " AND " );
+                buffer.append( " and " );
             }
         }
         
         buffer.append( ";" );
-        
-        values.clear();
-        identifierValues.clear();
         
         return buffer.toString();
     }
@@ -119,21 +116,19 @@ public abstract class AbstractStatementBuilder<T>
         List<Object> identifierValues = batchHandler.getIdentifierValues( object );
         
         final StringBuffer buffer = new StringBuffer().
-            append( "DELETE FROM " ).append( batchHandler.getTableName() ).append( " WHERE " );
+            append( "delete from " ).append( batchHandler.getTableName() ).append( " where " );
         
         for ( int i = 0; i < identifierColums.size(); i++ )
         {
-            buffer.append( identifierColums.get( i ) + "=" + identifierValues.get( i ) );
+            buffer.append( identifierColums.get( i ) + "=" + defaultEncode( identifierValues.get( i ) ) );
             
             if ( ( i + 1 ) < identifierColums.size() )
             {
-                buffer.append( " AND " );
+                buffer.append( " and " );
             }
         }
 
         buffer.append( ";" );
-        
-        identifierValues.clear();
         
         return buffer.toString();            
     }
@@ -143,23 +138,21 @@ public abstract class AbstractStatementBuilder<T>
         List<String> uniqueColumns = batchHandler.getUniqueColumns();
         List<Object> uniqueValues = batchHandler.getUniqueValues( object );
         
-        final String operator = inclusive ? " AND " : " OR ";
+        final String operator = inclusive ? " and " : " or ";
                 
         final StringBuffer buffer = new StringBuffer().
-            append( "SELECT " ).append( uniqueColumns.get( 0 ) ).append( " FROM " ).append( batchHandler.getTableName() ).append( " WHERE " );
+            append( "select " ).append( uniqueColumns.get( 0 ) ).append( " from " ).append( batchHandler.getTableName() ).append( " where " );
         
         for ( int i = 0; i < uniqueColumns.size(); i++ )
         {
-            buffer.append( uniqueColumns.get( i ) + "=" + uniqueValues.get( i ) );
+            buffer.append( uniqueColumns.get( i ) + "=" + defaultEncode( uniqueValues.get( i ) ) );
             
             if ( i + 1 < uniqueColumns.size() )
             {
                 buffer.append( operator );
             }
         }
-        
-        uniqueValues.clear();
-        
+                
         return buffer.toString();
     }
         

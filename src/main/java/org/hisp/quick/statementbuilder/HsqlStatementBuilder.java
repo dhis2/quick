@@ -58,7 +58,7 @@ public class HsqlStatementBuilder<T>
         
         final StringBuffer buffer = new StringBuffer();
         
-        buffer.append( "INSERT INTO " + batchHandler.getTableName() + " (" );
+        buffer.append( "insert into " + batchHandler.getTableName() + " (" );
         
         for ( String column : columns )
         {
@@ -70,7 +70,7 @@ public class HsqlStatementBuilder<T>
             buffer.deleteCharAt( buffer.length() - 1 );
         }
         
-        buffer.append( BRACKET_END + " VALUES " );
+        buffer.append( BRACKET_END + " values " );
                 
         return buffer.toString();
     }
@@ -86,7 +86,7 @@ public class HsqlStatementBuilder<T>
         
         for ( Object value : values )
         {
-            buffer.append( value + SEPARATOR );
+            buffer.append( defaultEncode( value ) + SEPARATOR );
         }
         
         if ( values.size() > 0 )
@@ -95,15 +95,13 @@ public class HsqlStatementBuilder<T>
         }
         
         buffer.append( BRACKET_END + SEPARATOR );
-        
-        values.clear();
-        
+                
         return buffer.toString();
     }
 
     @Override
     public String getDoubleColumnType()
     {
-        return "DOUBLE";
+        return "double";
     }
 }

@@ -31,6 +31,8 @@ package org.hisp.quick.statementbuilder;
 import org.hisp.quick.StatementBuilder;
 import org.hisp.quick.StatementDialect;
 import org.hisp.quick.batchhandler.AbstractBatchHandler;
+import org.hisp.quick.model.DataElement;
+import org.hisp.quick.model.DataElementBatchHandler;
 import org.hisp.quick.model.DataValue;
 import org.hisp.quick.model.DataValueBatchHandler;
 import org.junit.Test;
@@ -44,17 +46,43 @@ import static org.junit.Assert.*;
  */
 public class StatementBuilderTest
 {
+    private JdbcConfiguration postgreSqlJdbcConfig = new JdbcConfiguration( StatementDialect.POSTGRESQL, "driverClass", "connectionUrl", "username", "password" );
+    
     @Test
-    public void test()
+    public void testDataValuePostgreSqlStatements()
     {
-        String expectedInsert = "INSERT INTO datavalue (what,where,when,value) VALUES ";
+        String expInsert = "insert into datavalue (what,where,when,value) values ";
+        String expInsertNoColumn = "insert into datavalue values ";
+        String expInsertStatementValues = "(1,2,3,'ValueA'),";
+        String expUpdateStatement = "update datavalue set what=1,where=2,when=3,value='ValueA' where what=1 and where=2 and when=3;";
+
+        AbstractBatchHandler<DataValue> batchHandler = new DataValueBatchHandler( postgreSqlJdbcConfig );
         
-        JdbcConfiguration jdbcConfig = new JdbcConfiguration( StatementDialect.POSTGRESQL, "driverClass", "connectionUrl", "username", "password" );
+        StatementBuilder<DataValue> builder = new PostgreSqlStatementBuilder<>( batchHandler );
         
-        AbstractBatchHandler<DataValue> batchHandler = new DataValueBatchHandler( jdbcConfig );
+        DataValue dvA = new DataValue( 1, 2, 3, "ValueA" );
         
-        StatementBuilder<DataValue> builder = new PostgreSqlStatementBuilder<DataValue>( batchHandler );
+        assertEquals( expInsert, builder.getInsertStatementOpening() );
+        assertEquals( expInsertNoColumn, builder.getNoColumnInsertStatementOpening() );
+        assertEquals( expInsertStatementValues, builder.getInsertStatementValues( dvA ) );
+        assertEquals( expUpdateStatement, builder.getUpdateStatement( dvA ) );
+    }
+    
+    @Test
+    public void testDataElementPostgreSqlStatements()
+    {
+        String expInsert = "insert into dataelement (id,code,name,description) values ";
+        String expInsertNoColumn = "insert into dataelement values ";
+        String expInsertStatementValues = "(nextval('hibernate_sequence'),'CodeA','NameA','DescriptionA'),";
         
-        assertEquals( expectedInsert, builder.getInsertStatementOpening() );
+        AbstractBatchHandler<DataElement> batchHandler = new DataElementBatchHandler( postgreSqlJdbcConfig );
+
+        StatementBuilder<DataElement> builder = new PostgreSqlStatementBuilder<>( batchHandler );
+        
+        DataElement deA = new DataElement( "CodeA", "NameA", "DescriptionA" );
+
+        assertEquals( expInsert, builder.getInsertStatementOpening() );
+        assertEquals( expInsertNoColumn, builder.getNoColumnInsertStatementOpening() );
+        assertEquals( expInsertStatementValues, builder.getInsertStatementValues( deA ) );
     }
 }

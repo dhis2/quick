@@ -38,7 +38,7 @@ import org.hisp.quick.batchhandler.AbstractBatchHandler;
 public class PostgreSqlStatementBuilder<T>
     extends AbstractStatementBuilder<T>
 {
-    private static final String AUTO_INCREMENT = "nextval('hibernate_sequence')";
+    public static final String AUTO_INCREMENT = "nextval('hibernate_sequence')";
     
     // -------------------------------------------------------------------------
     // Constructor
@@ -61,7 +61,7 @@ public class PostgreSqlStatementBuilder<T>
         
         final StringBuffer buffer = new StringBuffer();
         
-        buffer.append( "INSERT INTO " + batchHandler.getTableName() + " (" );
+        buffer.append( "insert into " + batchHandler.getTableName() + " (" );
 
         if ( autoIncrementColumn != null )
         {
@@ -78,7 +78,7 @@ public class PostgreSqlStatementBuilder<T>
             buffer.deleteCharAt( buffer.length() - 1 );
         }
         
-        buffer.append( BRACKET_END + " VALUES " );
+        buffer.append( BRACKET_END + " values " );
         
         return buffer.toString();
     }
@@ -100,7 +100,7 @@ public class PostgreSqlStatementBuilder<T>
         
         for ( Object value : values )
         {
-            buffer.append( value + SEPARATOR );
+            buffer.append( defaultEncode( value ) + SEPARATOR );
         }
         
         if ( values.size() > 0 || autoIncrementColumn != null )
@@ -109,15 +109,13 @@ public class PostgreSqlStatementBuilder<T>
         }
         
         buffer.append( BRACKET_END + SEPARATOR );
-        
-        values.clear();
-        
+                
         return buffer.toString();
     }
 
     @Override
     public String getDoubleColumnType()
     {
-        return "DOUBLE PRECISION";
+        return "double precision";
     }
 }

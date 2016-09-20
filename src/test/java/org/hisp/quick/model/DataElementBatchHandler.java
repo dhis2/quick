@@ -83,12 +83,12 @@ public class DataElementBatchHandler
     @Override
     public List<String> getColumns()
     {
-        return getStringList( "id", "code", "name", "description" );
+        return getStringList( "code", "name", "description" );
     }
 
     @Override
     public List<Object> getValues( DataElement object )
     {
-        return getObjectList( object.getId(), object.getCode(), object.getName(), object.getDescription() );
+        return getObjectList( object.getCode(), object.getName(), object.getDescription() );
     }
 }

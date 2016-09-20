@@ -44,6 +44,13 @@ public class DataElement
     public DataElement()
     {
     }
+    
+    public DataElement( String code, String name, String description )
+    {
+        this.code = code;
+        this.name = name;
+        this.description = description;
+    }
 
     public int getId()
     {
