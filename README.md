@@ -35,7 +35,7 @@ The BatchHandler interface allows for batch insert operations and high-performan
 BatchHandlerFactory batchHandlerFactory;
 
 BatchHandler<DataElement> batchHandler = batchHandlerFactory
-  .createBatchHandler( DataElement.class ).init();
+  .createBatchHandler( DataElementBatchHandler.class ).init();
 
 for ( DataElement dataElement : dataElements )
 {
