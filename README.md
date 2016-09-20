@@ -35,11 +35,11 @@ The BatchHandler interface allows for batch insert operations and high-performan
 BatchHandlerFactory batchHandlerFactory;
 
 BatchHandler<DataElement> batchHandler = batchHandlerFactory
-  .createBatchHandler( DataElement.class ).init();
+  .createBatchHandler( DataElementBatchHandler.class ).init();
 
 for ( DataElement dataElement : dataElements )
 {
-  if ( !batchHandler.objectExists( dataElement )
+  if ( !batchHandler.objectExists( dataElement ) )
   {
     batchHandler.addObject( dataElement ); // Will batch and flush automatically
   }
