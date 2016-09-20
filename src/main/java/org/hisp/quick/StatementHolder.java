@@ -60,7 +60,7 @@ public interface StatementHolder
      * @return the number of affected rows.
      * @throws RuntimeException if an exception occurs.
      */
-    int executeUpdate( final String sql );
+    int executeUpdate( String sql );
 
     /**
      * Executes the given SQL statement. Closes the underlying database connection
@@ -72,7 +72,7 @@ public interface StatementHolder
      * @return the number of affected rows.
      * @throws RuntimeException if an exception occurs.
      */
-    int executeUpdate( final String sql, final boolean ignoreException );
+    int executeUpdate( String sql, final boolean ignoreException );
     
     /**
      * Executes the given SQL statement and returns the first column of the first
@@ -81,7 +81,7 @@ public interface StatementHolder
      * @param sql the SQL statement
      * @return the value returned by the query.
      */
-    Integer queryForInteger( final String sql );
+    Integer queryForInteger( String sql );
 
     /**
      * Executes the given SQL statement and returns the first column of the first
@@ -90,7 +90,7 @@ public interface StatementHolder
      * @param sql the SQL statement
      * @return the value returned by the query.
      */
-    Double queryForDouble( final String sql );
+    Double queryForDouble( String sql );
 
     /**
      * Executes the given SQL statement and returns the first column of the first
@@ -99,7 +99,7 @@ public interface StatementHolder
      * @param sql the SQL statement
      * @return the value returned by the query.
      */
-    String queryForString( final String sql );
+    String queryForString( String sql );
     
     /**
      * Executes a INSERT, UPDATE or DELETE SQL statement or an SQL statement that
@@ -108,7 +108,7 @@ public interface StatementHolder
      * @param sql the SQL statement to execute.
      * @return the row count resulting from the operation or nothing.
      */
-    int update( final String sql );
+    int update( String sql );
     
     /**
      * Method indicating whether the wrapped Connection is pooled.

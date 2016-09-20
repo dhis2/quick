@@ -30,8 +30,7 @@ package org.hisp.quick;
 
 
 /**
- * Interface which provides methods for performing SQL operations against a
- * single JDBC connection and statement.
+ * Interface which provides methods for retrieving StatementHolder interfaces.
  * 
  * @author Lars Helge Overland
  */
