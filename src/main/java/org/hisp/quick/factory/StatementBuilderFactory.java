@@ -49,6 +49,7 @@ public class StatementBuilderFactory
      * 
      * @param dialect the dialect of the StatementBuilder to create.
      * @param batchHandler the batch handler.
+     * @param <T> the BatchHandler class.
      * @return a StatementBuilder instance.
      */
     public static <T> StatementBuilder<T> createStatementBuilder( StatementDialect dialect, AbstractBatchHandler<T> batchHandler )

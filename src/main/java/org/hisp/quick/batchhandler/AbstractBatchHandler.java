@@ -333,6 +333,8 @@ public abstract class AbstractBatchHandler<T>
     
     /**
      * Use for testing purposes only.
+     * 
+     * @return the add object SQL string.
      */
     protected String getAddObjectSql()
     {
@@ -345,22 +347,30 @@ public abstract class AbstractBatchHandler<T>
 
     /**
      * Returns the database table name.
+     * 
+     * @return the database table name.
      */
     public abstract String getTableName();
 
     /**
      * Returns the database auto-increment column name, null if none.
+     * 
+     * @return the database auto-increment column name, null if none.
      */
     public abstract String getAutoIncrementColumn();
 
     /**
      * Indicates whether rows are unique across all unique columns (inclusive)
      * or unique for each individual unique column (exclusive).
+     * 
+     * @return true if rows are unique across unique columns.
      */
     public abstract boolean isInclusiveUniqueColumns();
     
     /**
      * Returns a list of primary key column names.
+     * 
+     * @return a list of primary key column names.
      */
     public abstract List<String> getIdentifierColumns();
 
@@ -368,11 +378,14 @@ public abstract class AbstractBatchHandler<T>
      * Returns a list of values matching the unique columns for the given object.
      * 
      * @param object the object.
+     * @return a list of values matching the unique columns for the given object.
      */
     public abstract List<Object> getIdentifierValues( T object );
 
     /**
      * Returns a list of unique column names.
+     * 
+     * @return  a list of unique column names.
      */
     public abstract List<String> getUniqueColumns();
     
@@ -380,11 +393,14 @@ public abstract class AbstractBatchHandler<T>
      * Returns a list of values matching the unique columns for the given object.
      * 
      * @param object the object.
+     * @return a list of values matching the unique columns for the given object.
      */
     public abstract List<Object> getUniqueValues( T object );
 
     /**
      * Returns a list of columns for the table of this batch handler.
+     * 
+     * @return a list of columns for the table of this batch handler.
      */
     public abstract List<String> getColumns();
     
@@ -392,6 +408,7 @@ public abstract class AbstractBatchHandler<T>
      * Returns a list of values matching the columns for the given object.
      * 
      * @param object the object.
+     * @return a list of values matching the columns for the given object.
      */
     public abstract List<Object> getValues( T object );
 }
