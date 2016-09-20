@@ -76,6 +76,16 @@ public abstract class AbstractStatementBuilder<T>
     }
 
     @Override
+    public String getSelectStatement( T arg )
+    {
+        return new StringBuffer( "select * from " )
+            .append( batchHandler.getTableName() )
+            .append( " where " )
+            .append( getUniquenessClause( arg ) )
+            .append( ";" ).toString();        
+    }
+
+    @Override
     public String getUpdateStatement( T object )
     {
         List<String> columns = batchHandler.getColumns();
@@ -131,8 +141,18 @@ public abstract class AbstractStatementBuilder<T>
         
         return buffer.append( ";" ).toString();            
     }
-    
+
+    @Override
     public String getUniquenessStatement( T object )
+    {
+        return new StringBuffer( "select 1 from " )
+            .append( batchHandler.getTableName() ).append( " where " )
+            .append( getUniquenessClause( object ) )
+            .append( ";" ).toString();
+    }
+
+    @Override
+    public String getUniquenessClause( T object )
     {
         List<String> uniqueColumns = batchHandler.getUniqueColumns();
         List<Object> uniqueValues = batchHandler.getUniqueValues( object );
@@ -140,8 +160,7 @@ public abstract class AbstractStatementBuilder<T>
                 
         final String operator = inclusive ? " and " : " or ";
                 
-        final StringBuffer buffer = new StringBuffer( "select 1 from " )
-            .append( batchHandler.getTableName() ).append( " where " );
+        final StringBuffer buffer = new StringBuffer();
         
         for ( int i = 0; i < uniqueColumns.size(); i++ )
         {
@@ -153,7 +172,7 @@ public abstract class AbstractStatementBuilder<T>
             }
         }
                 
-        return buffer.append( ";" ).toString();
+        return buffer.toString();
     }
         
     // -------------------------------------------------------------------------
@@ -199,7 +218,7 @@ public abstract class AbstractStatementBuilder<T>
     }
 
     // -------------------------------------------------------------------------
-    // Methods to be overridden by subclasses to change behaviour
+    // Methods to be overridden by subclasses to change behavior
     // -------------------------------------------------------------------------
 
     protected String encodeString( String value )

@@ -59,7 +59,15 @@ public interface BatchHandler<T>
      * @param object the object to add.
      * @return true if the object was added, false if not.
      */
-    boolean addObject( T object );
+    boolean addObject( T argument );
+    
+    /**
+     * Retrieves an object, using the unique columns of the given object as argument.
+     * 
+     * @param arg the argument object, identifier properties must be populated.
+     * @return an object.
+     */
+    T findObject( T arg );
     
     /**
      * Updates an object.

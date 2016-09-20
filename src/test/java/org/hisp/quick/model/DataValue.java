@@ -41,6 +41,10 @@ public class DataValue
     
     private String value;
 
+    public DataValue()
+    {
+    }
+    
     public DataValue( int what, int where, int when, String value )
     {
         this.what = what;

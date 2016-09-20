@@ -37,8 +37,7 @@ package org.hisp.quick;
 public interface StatementBuilder<T>
 {
     /**
-     * Creates the opening of an insert SQL statement. Requires that the table name,
-     * auto-increment column and columns are set.
+     * Creates the opening of an insert SQL statement.
      * 
      * @return the opening of an insert SQL statement.
      */
@@ -46,15 +45,13 @@ public interface StatementBuilder<T>
     
     /**
      * Creates the opening of an insert SQL statement with no columns defined.
-     * Requires that the table name is set.
      * 
      * @return the opening of an insert SQL statement.
      */
     String getNoColumnInsertStatementOpening();
-    
+        
     /**
-     * Creates a value list for an insert SQL statement. Requires that the table 
-     * name, auto-increment column and values are set. Clears values.
+     * Creates a value list for an insert SQL statement.
      * 
      * @param object the object.
      * @return the value list of and insert SQL statement.
@@ -62,8 +59,15 @@ public interface StatementBuilder<T>
     String getInsertStatementValues( T object );
     
     /**
-     * Creates an update SQL statement. Requires that the table name, identifier 
-     * columns / values and columns / values are set. Clears values and identifier
+     * Creates a select SQL statement.
+     * 
+     * @param object the argument object.
+     * @return a select SQL statement.
+     */
+    String getSelectStatement( T arg );
+    
+    /**
+     * Creates an update SQL statement.
      * values.
      * 
      * @param object the object.
@@ -72,8 +76,7 @@ public interface StatementBuilder<T>
     String getUpdateStatement( T object );
     
     /**
-     * Creates a delete SQL statement. Requires that table name and identifier
-     * columns/ values are set. Clears identifier values.
+     * Creates a delete SQL statement.
      * 
      * @param object the object.
      * @return a delete SQL statement.
@@ -81,13 +84,20 @@ public interface StatementBuilder<T>
     String getDeleteStatement( T object );
 
     /**
-     * Creates a select SQL statement. Requires that the table name and unique 
-     * columns / values are set. Clears unique values.
+     * Creates a select SQL statement.
      * 
      * @param object the object.
      * @return a select SQL statement.
      */
     String getUniquenessStatement( T object );
+    
+    /**
+     * Creates a SQL where / and clause for unique rows.
+     * 
+     * @param object the object.
+     * @return a SQL where / and clause.
+     */
+    String getUniquenessClause( T object );
     
     /**
      * Returns the name of a SQL double column type.

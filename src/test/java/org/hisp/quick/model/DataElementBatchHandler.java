@@ -1,5 +1,8 @@
 package org.hisp.quick.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /*
  * Copyright (c) 2004-2016, University of Oslo
  * All rights reserved.
@@ -96,5 +99,19 @@ public class DataElementBatchHandler
     public List<Object> getValues( DataElement object )
     {
         return getObjectList( object.getCode(), object.getName(), object.getDescription() );
+    }
+
+    @Override
+    public DataElement mapRow( ResultSet resultSet )
+        throws SQLException
+    {
+        DataElement dataElement = new DataElement();
+        
+        dataElement.setId( resultSet.getInt( "id" ) );
+        dataElement.setCode( resultSet.getString( "code" ) );
+        dataElement.setName( resultSet.getString( "name" ) );
+        dataElement.setDescription( resultSet.getString( "description" ) );
+        
+        return dataElement;
     }
 }

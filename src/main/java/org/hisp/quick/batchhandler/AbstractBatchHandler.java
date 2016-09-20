@@ -30,6 +30,7 @@ package org.hisp.quick.batchhandler;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -178,6 +179,34 @@ public abstract class AbstractBatchHandler<T>
         }
         
         return true;
+    }
+    
+    @Override
+    public final T findObject( T arg )
+    {
+        if ( getUniqueColumns() == null || getUniqueColumns().isEmpty() )
+        {
+            return null;
+        }
+        
+        final String sql = statementBuilder.getSelectStatement( arg );
+        
+        try
+        {
+            ResultSet resultSet = statement.executeQuery( sql );
+            
+            resultSet.next();
+            
+            return mapRow( resultSet );            
+        }
+        catch ( SQLException ex )
+        {
+            log.info( "Select SQL: " + sql );
+            
+            close();
+            
+            throw new RuntimeException( ex );
+        }        
     }
 
     @Override
@@ -411,4 +440,13 @@ public abstract class AbstractBatchHandler<T>
      * @return a list of values matching the columns for the given object.
      */
     public abstract List<Object> getValues( T object );
+    
+    /**
+     * Maps a ResultSet row to an object <T>.
+     * 
+     * @param resultSet the result set.
+     * @return an object <T>.
+     */
+    public abstract T mapRow( ResultSet resultSet )
+        throws SQLException;
 }

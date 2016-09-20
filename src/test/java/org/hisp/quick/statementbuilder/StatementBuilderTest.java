@@ -54,6 +54,7 @@ public class StatementBuilderTest
         String expInsert = "insert into datavalue (what,where,when,value) values ";
         String expInsertNoColumn = "insert into datavalue values ";
         String expInsertStatementValues = "(1,2,3,'ValueA'),";
+        String expSelectStatement = "select * from datavalue where what=1 and where=2 and when=3;";
         String expUpdateStatement = "update datavalue set what=1,where=2,when=3,value='ValueA' where what=1 and where=2 and when=3;";
         String expDeleteStatement = "delete from datavalue where what=1 and where=2 and when=3;";
         String expUniquenessStatment = "select 1 from datavalue where what=1 and where=2 and when=3;";
@@ -68,6 +69,7 @@ public class StatementBuilderTest
         assertEquals( expInsert, builder.getInsertStatementOpening() );
         assertEquals( expInsertNoColumn, builder.getNoColumnInsertStatementOpening() );
         assertEquals( expInsertStatementValues, builder.getInsertStatementValues( dvA ) );
+        assertEquals( expSelectStatement, builder.getSelectStatement( dvA ) );
         assertEquals( expUpdateStatement, builder.getUpdateStatement( dvA ) );
         assertEquals( expDeleteStatement, builder.getDeleteStatement( dvA ) );
         assertEquals( expUniquenessStatment, builder.getUniquenessStatement( dvA ) );
@@ -80,6 +82,7 @@ public class StatementBuilderTest
         String expInsert = "insert into dataelement (id,code,name,description) values ";
         String expInsertNoColumn = "insert into dataelement values ";
         String expInsertStatementValues = "(nextval('hibernate_sequence'),'CodeA','NameA','DescriptionA'),";
+        String expSelectStatement = "select * from dataelement where code='CodeA';";
         String expUpdateStatement = "update dataelement set code='CodeB',name='NameB',description='DescriptionB' where id=1;";
         String expDeleteStatement = "delete from dataelement where id=1;";
         String expUniquenessStatment = "select 1 from dataelement where code='CodeB';";
@@ -96,6 +99,7 @@ public class StatementBuilderTest
         assertEquals( expInsert, builder.getInsertStatementOpening() );
         assertEquals( expInsertNoColumn, builder.getNoColumnInsertStatementOpening() );
         assertEquals( expInsertStatementValues, builder.getInsertStatementValues( deA ) );
+        assertEquals( expSelectStatement, builder.getSelectStatement( deA ) );
         assertEquals( expUpdateStatement, builder.getUpdateStatement( deB ) );
         assertEquals( expDeleteStatement, builder.getDeleteStatement( deB ) );
         assertEquals( expUniquenessStatment, builder.getUniquenessStatement( deB ) );
