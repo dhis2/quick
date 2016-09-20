@@ -2,6 +2,28 @@
 
 Quick is a Java framework for high-performance JDBC batch operations.
 
+## StatementManager and StatementHolder
+
+The statement manager and holder allow you to perform JDBC SQL operations against a single connection and statement. Example usage:
+
+```java
+@Autowired
+StatementManager statementManager;
+
+int sum = 0;
+
+statementManager.initialise();
+
+StatementHolder statementHolder = statementManager.getHolder();
+
+for ( int i = 0; i < 10; i++ )
+{
+  sum += statementHolder.queryForInteger( "select sum(value) from item where id = " + i );
+}
+
+statementManager.destroy();
+```
+
 ## Spring configuration
 Quick components can easily be configured in Spring and used as Spring managed beans.
 
