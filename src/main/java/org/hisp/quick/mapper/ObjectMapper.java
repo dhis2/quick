@@ -34,6 +34,8 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
+ * Object mapper class.
+ * 
  * @author Lars Helge Overland
  */
 public class ObjectMapper<T>

@@ -38,6 +38,9 @@ import org.hisp.quick.StatementBuilder;
 import org.hisp.quick.batchhandler.AbstractBatchHandler;
 
 /**
+ * Abstract class to be extended by database specific statement builder
+ * implementations.
+ * 
  * @author Lars Helge Overland
  */
 public abstract class AbstractStatementBuilder<T>

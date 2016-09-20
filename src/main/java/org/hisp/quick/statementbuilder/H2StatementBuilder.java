@@ -33,6 +33,8 @@ import org.hisp.quick.batchhandler.AbstractBatchHandler;
  */
 
 /**
+ * H2 implementation of the StatementBuilder interface.
+ * 
  * @author Lars Helge Overland
  */
 public class H2StatementBuilder<T>

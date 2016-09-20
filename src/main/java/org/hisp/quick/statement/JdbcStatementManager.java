@@ -38,6 +38,8 @@ import org.hisp.quick.StatementHolder;
 import org.hisp.quick.StatementManager;
 
 /**
+ * JDBC implementation of the StatementManager insterface.
+ * 
  * @author Lars Helge Overland
  */
 public class JdbcStatementManager

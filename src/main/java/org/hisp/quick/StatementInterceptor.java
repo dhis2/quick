@@ -37,6 +37,8 @@ import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 /**
+ * AspectJ interceptor for initialising and destroying a statement manager.
+ * 
  * @author Lars Helge Overland
  */
 public class StatementInterceptor

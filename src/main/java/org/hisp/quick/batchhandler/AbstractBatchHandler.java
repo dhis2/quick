@@ -47,6 +47,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.util.StringUtils;
 
 /**
+ * Abstract class to be extended by concrete batch handler implementations.
+ * 
  * @author Lars Helge Overland
  */
 public abstract class AbstractBatchHandler<T>

@@ -38,6 +38,8 @@ import org.hisp.quick.statementbuilder.MySqlStatementBuilder;
 import org.hisp.quick.statementbuilder.PostgreSqlStatementBuilder;
 
 /**
+ * Factory class for creating statement builders.
+ * 
  * @author Lars Helge Overland
  */
 public class StatementBuilderFactory

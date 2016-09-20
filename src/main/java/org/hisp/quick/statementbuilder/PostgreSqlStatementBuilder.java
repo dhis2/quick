@@ -33,6 +33,8 @@ import org.hisp.quick.batchhandler.AbstractBatchHandler;
  */
 
 /**
+ * PostgreSQL implementation of the StatementBuilder interface.
+ * 
  * @author Lars Helge Overland
  */
 public class PostgreSqlStatementBuilder<T>

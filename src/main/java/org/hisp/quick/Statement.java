@@ -32,7 +32,6 @@ package org.hisp.quick;
  * Interface which represents a SQL statement.
  * 
  * @author Lars Helge Overland
- * @version $Id$
  */
 public interface Statement
 {

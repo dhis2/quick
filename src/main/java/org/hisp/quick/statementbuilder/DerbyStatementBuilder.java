@@ -33,6 +33,8 @@ import java.util.List;
 import org.hisp.quick.batchhandler.AbstractBatchHandler;
 
 /**
+ * Derby implementation of the StatementBuilder interface.
+ * 
  * @author Lars Helge Overland
  */
 public class DerbyStatementBuilder<T>

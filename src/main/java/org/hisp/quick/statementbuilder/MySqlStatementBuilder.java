@@ -33,6 +33,8 @@ import org.hisp.quick.batchhandler.AbstractBatchHandler;
  */
 
 /**
+ * MySQL implementation of the StatementBuilder interface.
+ * 
  * @author Lars Helge Overland
  */
 public class MySqlStatementBuilder<T>

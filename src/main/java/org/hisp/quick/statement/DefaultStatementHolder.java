@@ -36,6 +36,8 @@ import java.sql.Statement;
 import org.hisp.quick.StatementHolder;
 
 /**
+ * Class for holding JDBC statements.
+ * 
  * @author Lars Helge Overland
  */
 public class DefaultStatementHolder
