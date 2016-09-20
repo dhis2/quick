@@ -54,7 +54,7 @@ public interface BatchHandler<T>
         
     /**
      * Adds an object to the BatchHandler. Checks if the value is a duplicate,
-     * i.e. already added, before adding.
+     * i.e. already added to this BatchHandler instance, before adding it.
      * 
      * @param object the object to add.
      * @return true if the object was added, false if not.
@@ -85,7 +85,7 @@ public interface BatchHandler<T>
     
     /**
      * Flushes the BatchHandler by executing a potential remaining statement, and
-     * closing the statement object and the database connection.
+     * closing the underlying statement object and the database connection.
      */
     void flush();
 }
