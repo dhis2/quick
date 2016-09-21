@@ -193,9 +193,7 @@ public abstract class AbstractBatchHandler<T>
         {
             ResultSet resultSet = statement.executeQuery( sql );
             
-            resultSet.next();
-            
-            return mapRow( resultSet );            
+            return resultSet.next() ? mapRow( resultSet ) : null;
         }
         catch ( SQLException ex )
         {
