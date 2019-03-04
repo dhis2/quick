@@ -195,6 +195,10 @@ public abstract class AbstractStatementBuilder<T>
             {
                 encoded = encodeInteger( (Integer) value );
             }
+            else if ( clazz.equals( Long.class ) || clazz.equals( long.class ) )
+            {
+                encoded = encodeLong( (Long) value );
+            }
             else if ( clazz.equals( Double.class ) || clazz.equals( double.class ) )
             {
                 encoded = encodeDouble( (Double) value );
@@ -233,6 +237,11 @@ public abstract class AbstractStatementBuilder<T>
     }
     
     protected String encodeInteger( Integer value )
+    {
+        return String.valueOf( value );
+    }
+    
+    protected String encodeLong( Long value )
     {
         return String.valueOf( value );
     }
