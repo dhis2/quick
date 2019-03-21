@@ -96,5 +96,4 @@ public interface BatchHandler<T>
      * closing the underlying statement object and the database connection.
      */
     void flush();
-    
 }
