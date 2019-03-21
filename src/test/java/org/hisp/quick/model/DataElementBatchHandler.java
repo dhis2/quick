@@ -116,7 +116,7 @@ public class DataElementBatchHandler
     }
 
     @Override
-    public String getSequenceNameForIdGeneration()
+    public String getIdSequenceName()
     {
         return "dataelement_sequence";
     }

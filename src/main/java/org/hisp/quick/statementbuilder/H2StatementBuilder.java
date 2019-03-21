@@ -95,7 +95,7 @@ public class H2StatementBuilder<T>
         
         if ( autoIncrementColumn != null )
         {
-            buffer.append( "nextval('" + batchHandler.getSequenceNameForIdGeneration() + "')" + SEPARATOR );
+            buffer.append( "nextval('" + batchHandler.getIdSequenceName() + "')" + SEPARATOR );
         }
         
         for ( Object value : values )

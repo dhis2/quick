@@ -452,7 +452,7 @@ public abstract class AbstractBatchHandler<T>
      * 
      * @return the sequence name.
      */
-    public String getSequenceNameForIdGeneration()
+    public String getIdSequenceName()
     {
         return "hibernate_sequence";
     }
