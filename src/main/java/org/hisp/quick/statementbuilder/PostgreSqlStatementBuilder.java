@@ -95,7 +95,7 @@ public class PostgreSqlStatementBuilder<T>
 
         if ( autoIncrementColumn != null )
         {
-            buffer.append( AUTO_INCREMENT + SEPARATOR );
+            buffer.append( "nextval('" + batchHandler.getIdSequenceName() + "')" + SEPARATOR );
         }
         
         for ( Object value : values )
