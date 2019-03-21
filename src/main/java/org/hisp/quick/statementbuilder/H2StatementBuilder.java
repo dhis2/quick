@@ -58,16 +58,23 @@ public class H2StatementBuilder<T>
     {
         List<String> columns = batchHandler.getColumns();
         
+        String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
+        
         final StringBuffer buffer = new StringBuffer();
         
         buffer.append( "insert into " + batchHandler.getTableName() + " (" );
+        
+        if ( autoIncrementColumn != null )
+        {
+            buffer.append( autoIncrementColumn + SEPARATOR );
+        }
         
         for ( String column : columns )
         {
             buffer.append( column + SEPARATOR );
         }
         
-        if ( columns.size() > 0 )
+        if ( columns.size() > 0 || autoIncrementColumn != null )
         {
             buffer.deleteCharAt( buffer.length() - 1 );
         }
@@ -80,16 +87,23 @@ public class H2StatementBuilder<T>
     {
         List<Object> values = batchHandler.getValues( object );
         
+        String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
+        
         final StringBuffer buffer = new StringBuffer();
         
         buffer.append( BRACKET_START );
+        
+        if ( autoIncrementColumn != null )
+        {
+            buffer.append( "nextval('" + batchHandler.getSequenceNameForIdGeneration() + "')" + SEPARATOR );
+        }
         
         for ( Object value : values )
         {
             buffer.append( defaultEncode( value ) + SEPARATOR );
         }
         
-        if ( values.size() > 0 )
+        if ( values.size() > 0 || autoIncrementColumn != null )
         {
             buffer.deleteCharAt( buffer.length() - 1 );
         }

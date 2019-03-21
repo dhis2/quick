@@ -81,7 +81,7 @@ public class StatementBuilderTest
     {
         String expInsert = "insert into dataelement (id,code,name,description) values ";
         String expInsertNoColumn = "insert into dataelement values ";
-        String expInsertStatementValues = "(nextval('hibernate_sequence'),'CodeA','NameA','DescriptionA'),";
+        String expInsertStatementValues = "(nextval('dataelement_sequence'),'CodeA','NameA','DescriptionA'),";
         String expSelectStatement = "select * from dataelement where code='CodeA';";
         String expUpdateStatement = "update dataelement set code='CodeB',name='NameB',description='DescriptionB' where id=1;";
         String expDeleteStatement = "delete from dataelement where id=1;";

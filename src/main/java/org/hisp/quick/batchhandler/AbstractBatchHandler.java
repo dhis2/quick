@@ -446,4 +446,15 @@ public abstract class AbstractBatchHandler<T>
      */
     public abstract T mapRow( ResultSet resultSet )
         throws SQLException;
+    
+    /**
+     * Returns the sequence name to be used for generating next value for ids.
+     * 
+     * @return the sequence name.
+     */
+    public String getSequenceNameForIdGeneration()
+    {
+        return "hibernate_sequence";
+    }
+    
 }
