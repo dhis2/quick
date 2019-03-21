@@ -114,4 +114,10 @@ public class DataElementBatchHandler
         
         return dataElement;
     }
+
+    @Override
+    public String getIdSequenceName()
+    {
+        return "dataelement_sequence";
+    }
 }
