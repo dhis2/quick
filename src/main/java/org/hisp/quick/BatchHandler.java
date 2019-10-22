@@ -60,6 +60,14 @@ public interface BatchHandler<T>
      * @return true if the object was added, false if not.
      */
     boolean addObject( T object );
+
+    /**
+     * Directly inserts the object into the database.
+     *
+     * @param object the object to add.
+     * @return true if the object was inserted, false if not.
+     */
+    boolean insertObject( T object );
     
     /**
      * Retrieves an object, using the unique columns of the given object as argument.

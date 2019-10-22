@@ -178,7 +178,35 @@ public abstract class AbstractBatchHandler<T>
         
         return true;
     }
-    
+
+    @Override
+    public boolean insertObject( T object )
+    {
+        boolean result = false;
+        String query = statementBuilder.getInsertStatementOpening();
+        query += statementBuilder.getInsertStatementValues( object );
+
+        try
+        {
+            Statement statement = connection.createStatement();
+            result = statement.execute( query );
+
+        }
+        catch ( SQLException ex )
+        {
+            log.info("Insert SQL: " + query );
+
+
+            throw new RuntimeException( "Failed to insert object", ex );
+        }
+        finally
+        {
+            close();
+        }
+
+        return result;
+    }
+
     @Override
     public final T findObject( T arg )
     {
