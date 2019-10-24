@@ -49,7 +49,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * Abstract class to be extended by concrete batch handler implementations.
- * 
+ *
  * @author Lars Helge Overland
  */
 public abstract class AbstractBatchHandler<T>
@@ -63,28 +63,28 @@ public abstract class AbstractBatchHandler<T>
     private static final int MAX_LENGTH = 200000;
 
     private JdbcConfiguration configuration;
-    
+
     private Connection connection;
-    
+
     private Statement statement;
-    
+
     protected StatementBuilder<T> statementBuilder;
-        
+
     private StringBuffer addObjectSqlBuffer;
-    
+
     private final Set<String> uniqueObjects = new HashSet<>();
-    
+
     private int addObjectStatementCount = 0;
-    
+
     // -------------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------------
-    
+
     @SuppressWarnings( "unused" )
     private AbstractBatchHandler()
-    {   
+    {
     }
-    
+
     protected AbstractBatchHandler( JdbcConfiguration configuration )
     {
         this.configuration = configuration;
@@ -94,32 +94,32 @@ public abstract class AbstractBatchHandler<T>
     // -------------------------------------------------------------------------
     // BatchHandler implementation
     // -------------------------------------------------------------------------
-        
+
     @Override
     public final BatchHandler<T> init()
     {
         try
         {
             Class.forName( configuration.getDriverClass() );
-            
-            connection = DriverManager.getConnection( 
+
+            connection = DriverManager.getConnection(
                 configuration.getConnectionUrl(),
                 configuration.getUsername(),
                 configuration.getPassword() );
 
             this.addObjectSqlBuffer = new StringBuffer( MAX_LENGTH );
             this.addObjectStatementCount = 0;
-            
+
             statement = connection.createStatement();
-                        
+
             this.addObjectSqlBuffer.append( statementBuilder.getInsertStatementOpening() ); // Initial opening for addObject
-            
+
             return this;
         }
         catch ( Exception ex )
         {
             close();
-            
+
             throw new RuntimeException( "Failed to create statement", ex );
         }
     }
@@ -132,38 +132,38 @@ public abstract class AbstractBatchHandler<T>
 
     @Override
     public final boolean addObject( T object )
-    {        
+    {
         List<Object> uniqueList = getUniqueValues( object );
-        
+
         String uniqueKey = StringUtils.collectionToCommaDelimitedString( uniqueList );
-        
+
         boolean exists = uniqueList != null && !uniqueList.isEmpty() ? !uniqueObjects.add( uniqueKey ) : false;
-        
+
         if ( exists )
         {
             log.warn( "Duplicate object: " + object );
-            
+
             return false;
         }
-        
-        addObjectSqlBuffer.append( statementBuilder.getInsertStatementValues( object ) );        
-        
+
+        addObjectSqlBuffer.append( statementBuilder.getInsertStatementValues( object ) );
+
         addObjectStatementCount++;
-        
+
         if ( addObjectSqlBuffer.length() > MAX_LENGTH )
         {
             try
             {
                 addObjectSqlBuffer.deleteCharAt( addObjectSqlBuffer.length() - 1 );
-                
+
                 statement.executeUpdate( addObjectSqlBuffer.toString() );
-                
+
                 log.debug( "Add SQL: " + addObjectSqlBuffer );
-                                
+
                 addObjectSqlBuffer = new StringBuffer( MAX_LENGTH ).append( statementBuilder.getInsertStatementOpening() );
-                
+
                 addObjectStatementCount = 0;
-                
+
                 uniqueObjects.clear();
             }
             catch ( SQLException ex )
@@ -171,14 +171,37 @@ public abstract class AbstractBatchHandler<T>
                 log.info( "Add SQL: " + addObjectSqlBuffer );
 
                 close();
-                
+
                 throw new RuntimeException( "Failed to add objects", ex );
             }
         }
-        
+
         return true;
     }
-    
+
+    @Override
+    public boolean insertObject( T object )
+    {
+        final String sql =
+            statementBuilder.getInsertStatementOpening() +
+            statementBuilder.getInsertStatementValues( object );
+
+        log.debug( "Insert SQL: " + sql );
+
+        try
+        {
+            return statement.execute( sql );
+        }
+        catch ( SQLException ex )
+        {
+            log.info( "Insert SQL: " + sql );
+
+            close();
+
+            throw new RuntimeException( "Failed to insert object", ex );
+        }
+    }
+
     @Override
     public final T findObject( T arg )
     {
@@ -186,32 +209,32 @@ public abstract class AbstractBatchHandler<T>
         {
             return null;
         }
-        
+
         final String sql = statementBuilder.getSelectStatement( arg );
-        
+
         try
         {
             ResultSet resultSet = statement.executeQuery( sql );
-            
+
             return resultSet.next() ? mapRow( resultSet ) : null;
         }
         catch ( SQLException ex )
         {
             log.info( "Select SQL: " + sql );
-            
+
             close();
-            
+
             throw new RuntimeException( ex );
-        }        
+        }
     }
 
     @Override
     public final void updateObject( T object )
-    {        
+    {
         final String sql = statementBuilder.getUpdateStatement( object );
-        
+
         log.debug( "Update SQL: " + sql );
-        
+
         try
         {
             statement.executeUpdate( sql );
@@ -221,18 +244,18 @@ public abstract class AbstractBatchHandler<T>
             log.info( "Update SQL: " + sql );
 
             close();
-            
+
             throw new RuntimeException( "Failed to update object", ex );
         }
     }
 
     @Override
     public final void deleteObject( T object )
-    {        
+    {
         final String sql = statementBuilder.getDeleteStatement( object );
-        
+
         log.debug( "Delete SQL: " + sql );
-        
+
         try
         {
             statement.executeUpdate( sql );
@@ -242,7 +265,7 @@ public abstract class AbstractBatchHandler<T>
             log.info( "Delete SQL: " + sql );
 
             close();
-            
+
             throw new RuntimeException( "Failed to delete object", ex );
         }
     }
@@ -254,11 +277,11 @@ public abstract class AbstractBatchHandler<T>
         {
             return false;
         }
-        
+
         final String sql = statementBuilder.getUniquenessStatement( object );
-        
+
         log.debug( "Unique SQL: " + sql );
-        
+
         try
         {
             return statement.executeQuery( sql ).next();
@@ -268,11 +291,11 @@ public abstract class AbstractBatchHandler<T>
             log.info( "Unique SQL: " + sql );
 
             close();
-            
-            throw new RuntimeException( "Failed to check uniqueness of object", ex );            
+
+            throw new RuntimeException( "Failed to check uniqueness of object", ex );
         }
     }
-    
+
     @Override
     public final void flush()
     {
@@ -281,20 +304,20 @@ public abstract class AbstractBatchHandler<T>
             if ( addObjectSqlBuffer.length() > 2 && addObjectStatementCount > 0 )
             {
                 addObjectSqlBuffer.deleteCharAt( addObjectSqlBuffer.length() - 1 );
-                
+
                 log.debug( "Flush SQL: " + addObjectSqlBuffer );
-                
+
                 statement.executeUpdate( addObjectSqlBuffer.toString() );
-                                
+
                 addObjectStatementCount = 0;
-                
+
                 uniqueObjects.clear();
             }
         }
         catch ( SQLException ex )
         {
             log.info( "Flush SQL: " + addObjectSqlBuffer );
-            
+
             throw new RuntimeException( "Failed to flush BatchHandler", ex );
         }
         finally
@@ -320,7 +343,7 @@ public abstract class AbstractBatchHandler<T>
                 statementEx.printStackTrace();
             }
         }
-        
+
         if ( connection != null )
         {
             try
@@ -333,10 +356,10 @@ public abstract class AbstractBatchHandler<T>
             }
         }
     }
-    
+
     /**
      * Returns a List of String items.
-     * 
+     *
      * @param items the items.
      * @return a List of String items.
      */
@@ -347,7 +370,7 @@ public abstract class AbstractBatchHandler<T>
 
     /**
      * Returns a List of Object items.
-     * 
+     *
      * @param items the items.
      * @return a List of Object items.
      */
@@ -355,31 +378,31 @@ public abstract class AbstractBatchHandler<T>
     {
         return new ArrayList<Object>( Arrays.asList( items ) );
     }
-    
+
     /**
      * Use for testing purposes only.
-     * 
+     *
      * @return the add object SQL string.
      */
     protected String getAddObjectSql()
     {
         return addObjectSqlBuffer.toString();
     }
-    
+
     // -------------------------------------------------------------------------
     // Abstract get methods
     // -------------------------------------------------------------------------
 
     /**
      * Returns the database table name.
-     * 
+     *
      * @return the database table name.
      */
     public abstract String getTableName();
 
     /**
      * Returns the database auto-increment column name, null if none.
-     * 
+     *
      * @return the database auto-increment column name, null if none.
      */
     public abstract String getAutoIncrementColumn();
@@ -387,21 +410,21 @@ public abstract class AbstractBatchHandler<T>
     /**
      * Indicates whether rows are unique across all unique columns (inclusive)
      * or unique for each individual unique column (exclusive).
-     * 
+     *
      * @return true if rows are unique across unique columns.
      */
     public abstract boolean isInclusiveUniqueColumns();
-    
+
     /**
      * Returns a list of primary key column names.
-     * 
+     *
      * @return a list of primary key column names.
      */
     public abstract List<String> getIdentifierColumns();
 
     /**
      * Returns a list of values matching the unique columns for the given object.
-     * 
+     *
      * @param object the object.
      * @return a list of values matching the unique columns for the given object.
      */
@@ -409,14 +432,14 @@ public abstract class AbstractBatchHandler<T>
 
     /**
      * Returns a list of unique column names.
-     * 
+     *
      * @return  a list of unique column names.
      */
     public abstract List<String> getUniqueColumns();
-    
+
     /**
      * Returns a list of values matching the unique columns for the given object.
-     * 
+     *
      * @param object the object.
      * @return a list of values matching the unique columns for the given object.
      */
@@ -424,37 +447,37 @@ public abstract class AbstractBatchHandler<T>
 
     /**
      * Returns a list of columns for the table of this batch handler.
-     * 
+     *
      * @return a list of columns for the table of this batch handler.
      */
     public abstract List<String> getColumns();
-    
+
     /**
      * Returns a list of values matching the columns for the given object.
-     * 
+     *
      * @param object the object.
      * @return a list of values matching the columns for the given object.
      */
     public abstract List<Object> getValues( T object );
-    
+
     /**
      * Maps a ResultSet row to an object T.
-     * 
+     *
      * @param resultSet the result set.
      * @return an object T.
      * @throws SQLException if SQL operation failed.
      */
     public abstract T mapRow( ResultSet resultSet )
         throws SQLException;
-    
+
     /**
      * Returns the sequence name to be used for generating next value for ids.
-     * 
+     *
      * @return the sequence name.
      */
     public String getIdSequenceName()
     {
         return "hibernate_sequence";
     }
-    
+
 }
