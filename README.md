@@ -20,7 +20,7 @@ StatementHolder statementHolder = statementManager.getHolder();
 
 for ( int i = 0; i < 10; i++ )
 {
-	sum += statementHolder.queryForInteger( "select sum(value) from item where id = " + i );
+    sum += statementHolder.queryForInteger( "select sum(value) from item where id = " + i );
 }
 
 statementManager.destroy();
@@ -35,14 +35,14 @@ The `BatchHandler` interface allows for batch insert operations and high-perform
 BatchHandlerFactory batchHandlerFactory;
 
 BatchHandler<DataElement> batchHandler = batchHandlerFactory
-	.createBatchHandler( DataElementBatchHandler.class ).init();
+    .createBatchHandler( DataElementBatchHandler.class ).init();
 
 for ( DataElement dataElement : dataElements )
 {
-	if ( !batchHandler.objectExists( dataElement ) )
-	{
-		batchHandler.addObject( dataElement ); // Will batch and flush automatically
-	}
+    if ( !batchHandler.objectExists( dataElement ) )
+    {
+        batchHandler.addObject( dataElement ); // Will batch and flush automatically
+    }
 }
 
 batchHandler.flush(); // Flush remaining objects to database
