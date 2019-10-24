@@ -29,10 +29,10 @@ package org.hisp.quick;
  */
 
 /**
- * Interface responsible for performing batch and regular JDBC operations. Batch 
- * insert operations can be achieved with the addObject( Object ) method, which 
+ * Interface responsible for performing batch and regular JDBC operations. Batch
+ * insert operations can be achieved with the addObject( Object ) method, which
  * will utilize multiple insert SQL statements for high performance.
- * 
+ *
  * @author Lars Helge Overland
  */
 public interface BatchHandler<T>
@@ -40,65 +40,65 @@ public interface BatchHandler<T>
     /**
      * Initializes the BatchHandler by acquiring a database connection, creating a
      * statement object and initializing a SQL statement.
-     * 
+     *
      * @return this batch handler.
      */
     BatchHandler<T> init();
-    
+
     /**
      * Returns the current JdbcConfiguration.
-     * 
+     *
      * @return jdbc configuration.
      */
     JdbcConfiguration getConfiguration();
-        
+
     /**
      * Adds an object to the BatchHandler. Checks if the value is a duplicate,
      * i.e. already added to this BatchHandler instance, before adding it.
-     * 
+     *
      * @param object the object to add.
      * @return true if the object was added, false if not.
      */
     boolean addObject( T object );
 
     /**
-     * Directly inserts the object into the database.
+     * Inserts an object into the database immediately.
      *
-     * @param object the object to add.
+     * @param object the object to insert.
      * @return true if the object was inserted, false if not.
      */
     boolean insertObject( T object );
-    
+
     /**
      * Retrieves an object, using the unique columns of the given object as argument.
-     * 
+     *
      * @param arg the argument object, identifier properties must be populated.
      * @return an object.
      */
     T findObject( T arg );
-    
+
     /**
      * Updates an object.
-     * 
+     *
      * @param object the object to update.
      */
     void updateObject( T object );
-    
+
     /**
      * Deletes an object.
-     * 
+     *
      * @param object the object to delete.
      */
     void deleteObject( T object );
-    
+
     /**
      * Checks whether this object exists in the database or not.
-     * 
+     *
      * @param object the object to check.
      * @return true if the object exists, false if not.
      */
     boolean objectExists( T object );
-    
+
     /**
      * Flushes the BatchHandler by executing a potential remaining statement, and
      * closing the underlying statement object and the database connection.
