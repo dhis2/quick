@@ -182,9 +182,11 @@ public abstract class AbstractBatchHandler<T>
     @Override
     public boolean insertObject( T object )
     {
-        final String sql =
+        String sql =
             statementBuilder.getInsertStatementOpening() +
             statementBuilder.getInsertStatementValues( object );
+
+        sql = sql.substring(0, addObjectSqlBuffer.length() - 1 );
 
         log.debug( "Insert SQL: " + sql );
 
