@@ -186,7 +186,7 @@ public abstract class AbstractBatchHandler<T>
             statementBuilder.getInsertStatementOpening() +
             statementBuilder.getInsertStatementValues( object );
 
-        sql = sql.substring(0, addObjectSqlBuffer.length() - 1 );
+        sql = sql.substring(0, sql.length() - 1 );
 
         log.debug( "Insert SQL: " + sql );
 
