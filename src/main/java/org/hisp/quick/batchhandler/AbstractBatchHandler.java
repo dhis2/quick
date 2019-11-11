@@ -186,7 +186,12 @@ public abstract class AbstractBatchHandler<T>
             statementBuilder.getInsertStatementOpening() +
             statementBuilder.getInsertStatementValues( object );
 
-        sql = sql.substring(0, sql.length() - 1 );
+        if ( sql.length() == 0 )
+        {
+            return false;
+        }
+
+        sql = sql.substring( 0, sql.length() - 1 );
 
         log.debug( "Insert SQL: " + sql );
 
