@@ -74,7 +74,7 @@ public abstract class AbstractBatchHandler<T>
 
     private final Set<String> uniqueObjects = new HashSet<>();
 
-    private int addObjectStatementCount = 0;
+    private int addObjectCount = 0;
 
     // -------------------------------------------------------------------------
     // Constructor
@@ -108,7 +108,7 @@ public abstract class AbstractBatchHandler<T>
                 configuration.getPassword() );
 
             this.addObjectSqlBuffer = new StringBuffer( MAX_LENGTH );
-            this.addObjectStatementCount = 0;
+            this.addObjectCount = 0;
 
             statement = connection.createStatement();
 
@@ -133,13 +133,7 @@ public abstract class AbstractBatchHandler<T>
     @Override
     public final boolean addObject( T object )
     {
-        List<Object> uniqueList = getUniqueValues( object );
-
-        String uniqueKey = StringUtils.collectionToCommaDelimitedString( uniqueList );
-
-        boolean exists = uniqueList != null && !uniqueList.isEmpty() ? !uniqueObjects.add( uniqueKey ) : false;
-
-        if ( exists )
+        if ( objectExistsInternal( object ) )
         {
             log.warn( "Duplicate object: " + object );
 
@@ -148,7 +142,7 @@ public abstract class AbstractBatchHandler<T>
 
         addObjectSqlBuffer.append( statementBuilder.getInsertStatementValues( object ) );
 
-        addObjectStatementCount++;
+        addObjectCount++;
 
         if ( addObjectSqlBuffer.length() > MAX_LENGTH )
         {
@@ -162,7 +156,7 @@ public abstract class AbstractBatchHandler<T>
 
                 addObjectSqlBuffer = new StringBuffer( MAX_LENGTH ).append( statementBuilder.getInsertStatementOpening() );
 
-                addObjectStatementCount = 0;
+                addObjectCount = 0;
 
                 uniqueObjects.clear();
             }
@@ -304,11 +298,17 @@ public abstract class AbstractBatchHandler<T>
     }
 
     @Override
+    public int getAddObjectCount()
+    {
+        return addObjectCount;
+    }
+
+    @Override
     public final void flush()
     {
         try
         {
-            if ( addObjectSqlBuffer.length() > 2 && addObjectStatementCount > 0 )
+            if ( addObjectSqlBuffer != null && addObjectSqlBuffer.length() > 2 && addObjectCount > 0 )
             {
                 addObjectSqlBuffer.deleteCharAt( addObjectSqlBuffer.length() - 1 );
 
@@ -316,7 +316,7 @@ public abstract class AbstractBatchHandler<T>
 
                 statement.executeUpdate( addObjectSqlBuffer.toString() );
 
-                addObjectStatementCount = 0;
+                addObjectCount = 0;
 
                 uniqueObjects.clear();
             }
@@ -337,6 +337,9 @@ public abstract class AbstractBatchHandler<T>
     // Supportive methods
     // -------------------------------------------------------------------------
 
+    /**
+     * Closes the current statement and connection.
+     */
     private void close()
     {
         if ( statement != null )
@@ -345,9 +348,9 @@ public abstract class AbstractBatchHandler<T>
             {
                 statement.close();
             }
-            catch ( SQLException statementEx )
+            catch ( SQLException ex )
             {
-                statementEx.printStackTrace();
+                ex.printStackTrace();
             }
         }
 
@@ -357,11 +360,33 @@ public abstract class AbstractBatchHandler<T>
             {
                 connection.close();
             }
-            catch ( SQLException connectionEx )
+            catch ( SQLException ex )
             {
-                connectionEx.printStackTrace();
+                ex.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Checks whether the given object exists for the current batch handler.
+     *
+     * @param object the object.
+     * @return true if object exists, false if not.
+     */
+    private boolean objectExistsInternal( T object )
+    {
+        List<Object> uniqueList = getUniqueValues( object );
+
+        boolean exists = false;
+
+        if ( uniqueList != null && !uniqueList.isEmpty() )
+        {
+            String uniqueKey = StringUtils.collectionToCommaDelimitedString( uniqueList );
+
+            exists = !uniqueObjects.add( uniqueKey );
+        }
+
+        return exists;
     }
 
     /**

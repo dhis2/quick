@@ -1,6 +1,6 @@
 # Quick
 
-Quick is a Java framework for high-performance JDBC batch operations.
+Quick is a Java framework for high-performance, JDBC batch operations.
 
 View the [Javadoc](http://ci.dhis2.org/job/quick-javadoc/javadoc/).
 

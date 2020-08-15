@@ -100,6 +100,13 @@ public interface BatchHandler<T>
     boolean objectExists( T object );
 
     /**
+     * Returns the number of objects currently added to the batch handler buffer.
+     *
+     * @return the number of objects currently added to the batch handler buffer.
+     */
+    int getAddObjectCount();
+
+    /**
      * Flushes the BatchHandler by executing a potential remaining statement, and
      * closing the underlying statement object and the database connection.
      */

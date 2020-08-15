@@ -42,18 +42,33 @@ import static org.junit.Assert.*;
 public class BatchHandlerTest
 {
     @Test
-    public void testAdd()
+    public void testAddUniqueness()
     {
         DataValue v1 = new DataValue( 1, 1, 1, "a" );
         DataValue v2 = new DataValue( 1, 2, 2, "b" );
         DataValue v3 = new DataValue( 1, 3, 3, "c" );
         DataValue v4 = new DataValue( 1, 3, 3, "d" ); // Duplicate
-        
+
         BatchHandler<DataValue> batchHandler = new DataValueBatchHandler( JdbcStatementManager.IN_MEMORY_JDBC_CONFIG ).init();
-        
+
         assertTrue( batchHandler.addObject( v1 ) );
         assertTrue( batchHandler.addObject( v2 ) );
+        assertEquals( 2, batchHandler.getAddObjectCount() );
         assertTrue( batchHandler.addObject( v3 ) );
+        assertEquals( 3, batchHandler.getAddObjectCount() );
         assertFalse( batchHandler.addObject( v4 ) );
+        assertEquals( 3, batchHandler.getAddObjectCount() );
+        assertFalse( batchHandler.addObject( v4 ) );
+        assertEquals( 3, batchHandler.getAddObjectCount() );
+    }
+
+    @Test
+    public void testFlushWithoutInit()
+    {
+        BatchHandler<DataValue> batchHandler = new DataValueBatchHandler( JdbcStatementManager.IN_MEMORY_JDBC_CONFIG );
+
+        batchHandler.flush();
+
+        assertNotNull( batchHandler );
     }
 }
