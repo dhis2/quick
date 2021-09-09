@@ -29,7 +29,6 @@ package org.hisp.quick.batchhandler;
  */
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -100,12 +99,7 @@ public abstract class AbstractBatchHandler<T>
     {
         try
         {
-            Class.forName( configuration.getDriverClass() );
-
-            connection = DriverManager.getConnection(
-                configuration.getConnectionUrl(),
-                configuration.getUsername(),
-                configuration.getPassword() );
+            connection = configuration.getDataSource().getConnection();
 
             this.addObjectSqlBuffer = new StringBuffer( MAX_LENGTH );
             this.addObjectCount = 0;
