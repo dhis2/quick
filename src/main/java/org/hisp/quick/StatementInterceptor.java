@@ -31,7 +31,6 @@ package org.hisp.quick;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hisp.quick.StatementManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;

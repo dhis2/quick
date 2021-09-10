@@ -46,7 +46,7 @@ import static org.junit.Assert.*;
  */
 public class StatementBuilderTest
 {
-    private JdbcConfiguration postgreSqlJdbcConfig = new JdbcConfiguration( StatementDialect.POSTGRESQL, "driverClass", "connectionUrl", "username", "password" );
+    private JdbcConfiguration postgreSqlJdbcConfig = new JdbcConfiguration( StatementDialect.POSTGRESQL, null );
     
     @Test
     public void testDataValuePostgreSqlStatements()

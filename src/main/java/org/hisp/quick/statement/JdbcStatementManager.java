@@ -29,13 +29,13 @@ package org.hisp.quick.statement;
  */
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.hisp.quick.JdbcConfiguration;
 import org.hisp.quick.StatementDialect;
 import org.hisp.quick.StatementHolder;
 import org.hisp.quick.StatementManager;
+import org.hsqldb.jdbc.JDBCDataSource;
 
 /**
  * JDBC implementation of the StatementManager insterface.
@@ -45,7 +45,7 @@ import org.hisp.quick.StatementManager;
 public class JdbcStatementManager
     implements StatementManager
 {
-    public static final JdbcConfiguration IN_MEMORY_JDBC_CONFIG = new JdbcConfiguration( StatementDialect.HSQL, "org.hsqldb.jdbc.JDBCDriver", "jdbc:hsqldb:mem:quick", "SA", "" );
+    public static final JdbcConfiguration IN_MEMORY_JDBC_CONFIG = initializeInMemoryJdbcConfig() ;
     
     private ThreadLocal<StatementHolder> holderTag = new ThreadLocal<StatementHolder>();
 
@@ -138,6 +138,16 @@ public class JdbcStatementManager
     // Supportive methods
     // -------------------------------------------------------------------------
     
+    
+    private static JdbcConfiguration initializeInMemoryJdbcConfig()
+    {
+        JDBCDataSource ds = new JDBCDataSource();
+        ds.setUrl( "jdbc:hsqldb:mem:quick" );
+        ds.setUser( "SA" );
+        ds.setPassword( "" );
+        return new JdbcConfiguration( StatementDialect.HSQL, ds );
+    }
+    
     private Connection getConnection()
     {
         return getConnection( getConfiguration() );
@@ -147,12 +157,7 @@ public class JdbcStatementManager
     {
         try
         {            
-            Class.forName( config.getDriverClass() );
-            
-            Connection connection = DriverManager.getConnection( 
-                config.getConnectionUrl(),
-                config.getUsername(),
-                config.getPassword() );
+            Connection connection = config.getDataSource().getConnection();
             
             return connection;
         }

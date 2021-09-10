@@ -1,5 +1,7 @@
 package org.hisp.quick;
 
+import javax.sql.DataSource;
+
 /*
  * Copyright (c) 2004-2016, University of Oslo
  * All rights reserved.
@@ -37,14 +39,8 @@ public class JdbcConfiguration
 {
     private StatementDialect dialect;
     
-    private String driverClass;
+    private DataSource dataSource;
     
-    private String connectionUrl;
-    
-    private String username;
-    
-    private String password;
-
     // -------------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------------
@@ -53,14 +49,10 @@ public class JdbcConfiguration
     {   
     }
     
-    public JdbcConfiguration( StatementDialect dialect, String driverClass, String connectionUrl,
-        String username, String password )
+    public JdbcConfiguration( StatementDialect dialect, DataSource dataSource )
     {
         this.dialect = dialect;
-        this.driverClass = driverClass;
-        this.connectionUrl = connectionUrl;
-        this.username = username;
-        this.password = password;
+        this.dataSource = dataSource;
     }
 
     // -------------------------------------------------------------------------
@@ -70,7 +62,7 @@ public class JdbcConfiguration
     @Override
     public String toString()
     {
-        return "[Dialect: " + dialect + ", driver class: " + driverClass + ", connection url: " + connectionUrl + ", username: " + username + ", password: " + password + "]";
+        return "[Dialect: " + dialect + ", dataSource runtime class: " + dataSource.getClass().getName() + "]";
     }
     
     // -------------------------------------------------------------------------
@@ -87,43 +79,14 @@ public class JdbcConfiguration
         this.dialect = dialect;
     }
     
-    public String getDriverClass()
+    public DataSource getDataSource()
     {
-        return driverClass;
+        return dataSource;
     }
 
-    public void setDriverClass( String driverClass )
+    public void setDataSource( DataSource dataSource )
     {
-        this.driverClass = driverClass;
+        this.dataSource = dataSource;
     }
 
-    public String getConnectionUrl()
-    {
-        return connectionUrl;
-    }
-
-    public void setConnectionUrl( String connectionUrl )
-    {
-        this.connectionUrl = connectionUrl;
-    }
-
-    public String getUsername()
-    {
-        return username;
-    }
-
-    public void setUsername( String username )
-    {
-        this.username = username;
-    }
-    
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword( String password )
-    {
-        this.password = password;
-    }
 }

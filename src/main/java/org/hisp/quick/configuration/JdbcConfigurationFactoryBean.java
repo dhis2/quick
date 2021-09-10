@@ -1,5 +1,7 @@
 package org.hisp.quick.configuration;
 
+import javax.sql.DataSource;
+
 /*
  * Copyright (c) 2004-2016, University of Oslo
  * All rights reserved.
@@ -61,33 +63,13 @@ public class JdbcConfigurationFactoryBean
         this.dialectName = dialectName;
     }
 
-    private String driverClass;
+    private DataSource dataSource;
 
-    public void setDriverClass( String driverClass )
+    public void setDataSource( DataSource dataSource )
     {
-        this.driverClass = driverClass;
+        this.dataSource = dataSource;
     }
 
-    private String connectionUrl;
-
-    public void setConnectionUrl( String connectionUrl )
-    {
-        this.connectionUrl = connectionUrl;
-    }
-
-    private String username;
-
-    public void setUsername( String username )
-    {
-        this.username = username;
-    }
-
-    private String password;
-
-    public void setPassword( String password )
-    {
-        this.password = password;
-    }
 
     // -------------------------------------------------------------------------
     // InitializingBean implementation
@@ -102,10 +84,7 @@ public class JdbcConfigurationFactoryBean
         StatementDialect _dialect = dialect != null ? dialect : StatementDialect.valueOf( dialectName );
         
         configuration.setDialect( _dialect );
-        configuration.setDriverClass( driverClass );
-        configuration.setConnectionUrl( connectionUrl );
-        configuration.setUsername( username );
-        configuration.setPassword( password );
+        configuration.setDataSource( dataSource );
         
         this.configuration = configuration;        
     }

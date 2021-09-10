@@ -89,7 +89,6 @@
       <groupId>org.hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
       <version>2.3.4</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
