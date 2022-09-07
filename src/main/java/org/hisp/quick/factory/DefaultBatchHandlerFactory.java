@@ -33,7 +33,6 @@ import java.lang.reflect.Constructor;
 import org.hisp.quick.BatchHandler;
 import org.hisp.quick.BatchHandlerFactory;
 import org.hisp.quick.JdbcConfiguration;
-import org.hisp.quick.statement.JdbcStatementManager;
 
 /**
  * @author Lars Helge Overland
@@ -53,24 +52,13 @@ public class DefaultBatchHandlerFactory
     }
 
     // -------------------------------------------------------------------------
-    // Static params
-    // -------------------------------------------------------------------------
-
-    private boolean inMemory = false;
-
-    public void setInMemory( boolean inMemory )
-    {
-        this.inMemory = inMemory;
-    }
-
-    // -------------------------------------------------------------------------
     // BatchHandlerFactory implementation
     // -------------------------------------------------------------------------
 
     @Override
     public <T> BatchHandler<T> createBatchHandler( Class<? extends BatchHandler<T>> clazz )
     {
-        return createBatchHandler( clazz, inMemory ? JdbcStatementManager.IN_MEMORY_JDBC_CONFIG : jdbcConfiguration );
+        return createBatchHandler( clazz, jdbcConfiguration );
     }
 
     // -------------------------------------------------------------------------
@@ -82,13 +70,13 @@ public class DefaultBatchHandlerFactory
         try
         {
             Class<?>[] argumentClasses = new Class<?>[] { JdbcConfiguration.class };
-            
+
             Constructor<? extends BatchHandler<T>> constructor = clazz.getConstructor( argumentClasses );
-            
+
             Object[] arguments = new Object[] { config };
-            
+
             BatchHandler<T> batchHandler = constructor.newInstance( arguments );
-            
+
             return batchHandler;
         }
         catch ( Exception ex )
