@@ -37,23 +37,23 @@ import org.hisp.quick.StatementHolder;
 
 /**
  * Class for holding JDBC statements.
- * 
+ *
  * @author Lars Helge Overland
  */
 public class DefaultStatementHolder
     implements StatementHolder
 {
     private Connection connection;
-    
+
     private boolean pooled;
 
     private Statement statement;
-    
+
     public DefaultStatementHolder( Connection connection )
     {
         this.connection = connection;
     }
-    
+
     public DefaultStatementHolder( Connection connection, boolean pooled )
     {
         this.connection = connection;
@@ -98,7 +98,7 @@ public class DefaultStatementHolder
             {
                 forceClose();
             }
-            
+
             throw new RuntimeException( ex );
         }
         finally
@@ -113,13 +113,13 @@ public class DefaultStatementHolder
         try
         {
             final ResultSet resultSet = statement.executeQuery( sql );
-            
+
             return resultSet.next() ? resultSet.getInt( 1 ) : null;
         }
         catch ( SQLException ex )
         {
             forceClose();
-            
+
             throw new RuntimeException( ex );
         }
         finally
@@ -134,13 +134,13 @@ public class DefaultStatementHolder
         try
         {
             final ResultSet resultSet = statement.executeQuery( sql );
-            
+
             return resultSet.next() ? resultSet.getDouble( 1 ) : null;
         }
         catch ( SQLException ex )
         {
             forceClose();
-            
+
             throw new RuntimeException( ex );
         }
         finally
@@ -155,13 +155,13 @@ public class DefaultStatementHolder
         try
         {
             final ResultSet resultSet = statement.executeQuery( sql );
-            
+
             return resultSet.next() ? resultSet.getString( 1 ) : null;
         }
         catch ( SQLException ex )
         {
             forceClose();
-            
+
             throw new RuntimeException( ex );
         }
         finally
@@ -180,7 +180,7 @@ public class DefaultStatementHolder
         catch ( SQLException ex )
         {
             forceClose();
-            
+
             throw new RuntimeException( ex );
         }
         finally
@@ -211,7 +211,7 @@ public class DefaultStatementHolder
             {
             }
         }
-        
+
         if ( connection != null )
         {
             try
@@ -219,11 +219,11 @@ public class DefaultStatementHolder
                 connection.close();
             }
             catch ( SQLException ex )
-            {   
+            {
             }
         }
     }
-    
+
     private Statement createStatement()
     {
         try
@@ -233,8 +233,8 @@ public class DefaultStatementHolder
         catch ( SQLException ex )
         {
             forceClose();
-            
-            throw new RuntimeException( "Failed to create statement", ex );            
+
+            throw new RuntimeException( "Failed to create statement", ex );
         }
     }
 }

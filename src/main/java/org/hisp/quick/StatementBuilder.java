@@ -31,53 +31,52 @@ package org.hisp.quick;
 /**
  * Interface which provides SQL statements. StatementBuilder instances will
  * typically be produced by a factory and be related to a specific DBMS.
- * 
+ *
  * @author Lars Helge Overland
  */
 public interface StatementBuilder<T>
 {
     /**
      * Creates the opening of an insert SQL statement.
-     * 
+     *
      * @return the opening of an insert SQL statement.
      */
     String getInsertStatementOpening();
-    
+
     /**
      * Creates the opening of an insert SQL statement with no columns defined.
-     * 
+     *
      * @return the opening of an insert SQL statement.
      */
     String getNoColumnInsertStatementOpening();
-        
+
     /**
      * Creates a value list for an insert SQL statement.
-     * 
+     *
      * @param object the object.
      * @return the value list of and insert SQL statement.
      */
     String getInsertStatementValues( T object );
-    
+
     /**
      * Creates a select SQL statement.
-     * 
+     *
      * @param arg the argument object.
      * @return a select SQL statement.
      */
     String getSelectStatement( T arg );
-    
+
     /**
-     * Creates an update SQL statement.
-     * values.
-     * 
+     * Creates an update SQL statement. values.
+     *
      * @param object the object.
      * @return an update SQL statement.
      */
     String getUpdateStatement( T object );
-    
+
     /**
      * Creates a delete SQL statement.
-     * 
+     *
      * @param object the object.
      * @return a delete SQL statement.
      */
@@ -85,23 +84,23 @@ public interface StatementBuilder<T>
 
     /**
      * Creates a select SQL statement.
-     * 
+     *
      * @param object the object.
      * @return a select SQL statement.
      */
     String getUniquenessStatement( T object );
-    
+
     /**
      * Creates a SQL where / and clause for unique rows.
-     * 
+     *
      * @param object the object.
      * @return a SQL where / and clause.
      */
     String getUniquenessClause( T object );
-    
+
     /**
      * Returns the name of a SQL double column type.
-     * 
+     *
      * @return the name of a SQL double column type.
      */
     String getDoubleColumnType();

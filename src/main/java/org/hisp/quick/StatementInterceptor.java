@@ -37,18 +37,18 @@ import org.aspectj.lang.ProceedingJoinPoint;
 
 /**
  * AspectJ interceptor for initialising and destroying a statement manager.
- * 
+ *
  * @author Lars Helge Overland
  */
 public class StatementInterceptor
 {
     private static final Log log = LogFactory.getLog( StatementInterceptor.class );
-    
+
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
 
-    private List<StatementManager> statementManagers = new ArrayList<StatementManager>();
+    private List<StatementManager> statementManagers = new ArrayList<>();
 
     public void setStatementManagers( List<StatementManager> statementManagers )
     {
@@ -59,14 +59,14 @@ public class StatementInterceptor
         throws Throwable
     {
         Object object = null;
-        
+
         for ( StatementManager manager : statementManagers )
         {
             manager.initialise();
-            
+
             log.debug( "Initialised statement manager" );
         }
-        
+
         try
         {
             object = joinPoint.proceed();
@@ -78,7 +78,7 @@ public class StatementInterceptor
                 try
                 {
                     manager.destroy();
-                    
+
                     log.debug( "Destroyed statement manager" );
                 }
                 catch ( Exception ex )
@@ -87,7 +87,7 @@ public class StatementInterceptor
                 }
             }
         }
-        
+
         return object;
     }
 }

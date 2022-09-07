@@ -36,10 +36,10 @@ import org.springframework.beans.factory.FactoryBean;
 
 /**
  * Simple configurable factory bean that provides JdbcConfiguration instances.
- * This could be injected into the StatementManager and BatchHandlerFactory components.
- * Applications may implement their own factory bean providing JdbcConfiguration
- * instances if more customized configuration is needed.
- * 
+ * This could be injected into the StatementManager and BatchHandlerFactory
+ * components. Applications may implement their own factory bean providing
+ * JdbcConfiguration instances if more customized configuration is needed.
+ *
  * @author Lars Helge Overland
  */
 public class JdbcConfigurationFactoryBean
@@ -55,9 +55,9 @@ public class JdbcConfigurationFactoryBean
     {
         this.dialect = dialect;
     }
-    
+
     private String dialectName;
-    
+
     public void setDialectName( String dialectName )
     {
         this.dialectName = dialectName;
@@ -70,23 +70,22 @@ public class JdbcConfigurationFactoryBean
         this.dataSource = dataSource;
     }
 
-
     // -------------------------------------------------------------------------
     // InitializingBean implementation
     // -------------------------------------------------------------------------
 
     private JdbcConfiguration configuration;
-    
+
     public void init()
     {
         JdbcConfiguration configuration = new JdbcConfiguration();
-        
+
         StatementDialect _dialect = dialect != null ? dialect : StatementDialect.valueOf( dialectName );
-        
+
         configuration.setDialect( _dialect );
         configuration.setDataSource( dataSource );
-        
-        this.configuration = configuration;        
+
+        this.configuration = configuration;
     }
 
     // -------------------------------------------------------------------------
@@ -100,11 +99,13 @@ public class JdbcConfigurationFactoryBean
         return configuration;
     }
 
+    @Override
     public Class<JdbcConfiguration> getObjectType()
     {
         return JdbcConfiguration.class;
     }
 
+    @Override
     public boolean isSingleton()
     {
         return true;

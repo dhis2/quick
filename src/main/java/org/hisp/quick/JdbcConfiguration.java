@@ -32,23 +32,23 @@ import javax.sql.DataSource;
 
 /**
  * Represents configuration for a JDBC database connection.
- * 
+ *
  * @author Lars Helge Overland
  */
 public class JdbcConfiguration
 {
     private StatementDialect dialect;
-    
+
     private DataSource dataSource;
-    
+
     // -------------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------------
-    
+
     public JdbcConfiguration()
-    {   
+    {
     }
-    
+
     public JdbcConfiguration( StatementDialect dialect, DataSource dataSource )
     {
         this.dialect = dialect;
@@ -64,7 +64,7 @@ public class JdbcConfiguration
     {
         return "[Dialect: " + dialect + ", dataSource runtime class: " + dataSource.getClass().getName() + "]";
     }
-    
+
     // -------------------------------------------------------------------------
     // Getters and setters
     // -------------------------------------------------------------------------
@@ -78,7 +78,7 @@ public class JdbcConfiguration
     {
         this.dialect = dialect;
     }
-    
+
     public DataSource getDataSource()
     {
         return dataSource;

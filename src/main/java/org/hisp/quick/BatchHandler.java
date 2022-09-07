@@ -38,8 +38,8 @@ package org.hisp.quick;
 public interface BatchHandler<T>
 {
     /**
-     * Initializes the BatchHandler by acquiring a database connection, creating a
-     * statement object and initializing a SQL statement.
+     * Initializes the BatchHandler by acquiring a database connection, creating
+     * a statement object and initializing a SQL statement.
      *
      * @return this batch handler.
      */
@@ -70,7 +70,8 @@ public interface BatchHandler<T>
     boolean insertObject( T object );
 
     /**
-     * Retrieves an object, using the unique columns of the given object as argument.
+     * Retrieves an object, using the unique columns of the given object as
+     * argument.
      *
      * @param arg the argument object, identifier properties must be populated.
      * @return an object.
@@ -100,15 +101,17 @@ public interface BatchHandler<T>
     boolean objectExists( T object );
 
     /**
-     * Returns the number of objects currently added to the batch handler buffer.
+     * Returns the number of objects currently added to the batch handler
+     * buffer.
      *
-     * @return the number of objects currently added to the batch handler buffer.
+     * @return the number of objects currently added to the batch handler
+     *         buffer.
      */
     int getAddObjectCount();
 
     /**
-     * Flushes the BatchHandler by executing a potential remaining statement, and
-     * closing the underlying statement object and the database connection.
+     * Flushes the BatchHandler by executing a potential remaining statement,
+     * and closing the underlying statement object and the database connection.
      */
     void flush();
 }

@@ -38,7 +38,7 @@ public interface RowMapper<T>
 {
     /**
      * Maps a row from a ResultSet to an object.
-     * 
+     *
      * @param resultSet the ResultSet.
      * @return an object.
      * @throws SQLException if a database access error occurs.

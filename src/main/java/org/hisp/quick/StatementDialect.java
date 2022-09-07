@@ -28,10 +28,9 @@ package org.hisp.quick;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 /**
  * Enum holding fields for various DBMSs.
- * 
+ *
  * @author Lars Helge Overland
  */
 public enum StatementDialect
@@ -40,6 +39,5 @@ public enum StatementDialect
     POSTGRESQL,
     H2,
     HSQL,
-    DERBY,
-    MSSQL
+    MSSQL;
 }

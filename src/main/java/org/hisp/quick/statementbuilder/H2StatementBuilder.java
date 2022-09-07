@@ -34,20 +34,16 @@ import org.hisp.quick.batchhandler.AbstractBatchHandler;
 
 /**
  * H2 implementation of the StatementBuilder interface.
- * 
+ *
  * @author Lars Helge Overland
  */
 public class H2StatementBuilder<T>
     extends AbstractStatementBuilder<T>
 {
-    // -------------------------------------------------------------------------
-    // Constructor
-    // -------------------------------------------------------------------------
-
     public H2StatementBuilder( AbstractBatchHandler<T> batchHandler )
     {
         super( batchHandler );
-    }    
+    }
 
     // -------------------------------------------------------------------------
     // AbstractStatementBuilder implementation
@@ -57,28 +53,28 @@ public class H2StatementBuilder<T>
     public String getInsertStatementOpening()
     {
         List<String> columns = batchHandler.getColumns();
-        
+
         String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
-        
+
         final StringBuffer buffer = new StringBuffer();
-        
+
         buffer.append( "insert into " + batchHandler.getTableName() + " (" );
-        
+
         if ( autoIncrementColumn != null )
         {
             buffer.append( autoIncrementColumn + SEPARATOR );
         }
-        
+
         for ( String column : columns )
         {
             buffer.append( column + SEPARATOR );
         }
-        
+
         if ( columns.size() > 0 || autoIncrementColumn != null )
         {
             buffer.deleteCharAt( buffer.length() - 1 );
         }
-        
+
         return buffer.append( BRACKET_END + " values " ).toString();
     }
 
@@ -86,28 +82,28 @@ public class H2StatementBuilder<T>
     public String getInsertStatementValues( T object )
     {
         List<Object> values = batchHandler.getValues( object );
-        
+
         String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
-        
+
         final StringBuffer buffer = new StringBuffer();
-        
+
         buffer.append( BRACKET_START );
-        
+
         if ( autoIncrementColumn != null )
         {
             buffer.append( "nextval('" + batchHandler.getIdSequenceName() + "')" + SEPARATOR );
         }
-        
+
         for ( Object value : values )
         {
             buffer.append( defaultEncode( value ) + SEPARATOR );
         }
-        
+
         if ( values.size() > 0 || autoIncrementColumn != null )
         {
             buffer.deleteCharAt( buffer.length() - 1 );
         }
-        
+
         return buffer.append( BRACKET_END + SEPARATOR ).toString();
     }
 
