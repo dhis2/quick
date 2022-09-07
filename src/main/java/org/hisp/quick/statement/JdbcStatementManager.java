@@ -32,22 +32,18 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.hisp.quick.JdbcConfiguration;
-import org.hisp.quick.StatementDialect;
 import org.hisp.quick.StatementHolder;
 import org.hisp.quick.StatementManager;
-import org.hsqldb.jdbc.JDBCDataSource;
 
 /**
  * JDBC implementation of the StatementManager insterface.
- * 
+ *
  * @author Lars Helge Overland
  */
 public class JdbcStatementManager
     implements StatementManager
 {
-    public static final JdbcConfiguration IN_MEMORY_JDBC_CONFIG = initializeInMemoryJdbcConfig() ;
-    
-    private ThreadLocal<StatementHolder> holderTag = new ThreadLocal<StatementHolder>();
+    private ThreadLocal<StatementHolder> holderTag = new ThreadLocal<>();
 
     // -------------------------------------------------------------------------
     // Dependencies
@@ -61,17 +57,6 @@ public class JdbcStatementManager
     }
 
     // -------------------------------------------------------------------------
-    // Static params
-    // -------------------------------------------------------------------------
-
-    private boolean inMemory = false;
-
-    public void setInMemory( boolean inMemory )
-    {
-        this.inMemory = inMemory;
-    }
-
-    // -------------------------------------------------------------------------
     // StatementManager implementation
     // -------------------------------------------------------------------------
 
@@ -81,7 +66,7 @@ public class JdbcStatementManager
         Connection connection = getConnection();
 
         StatementHolder holder = new DefaultStatementHolder( connection, true );
-        
+
         holderTag.set( holder );
     }
 
@@ -89,13 +74,13 @@ public class JdbcStatementManager
     public StatementHolder getHolder()
     {
         StatementHolder holder = holderTag.get();
-        
+
         if ( holder != null )
         {
             return holder;
         }
-        
-        return new DefaultStatementHolder( getConnection(), false );        
+
+        return new DefaultStatementHolder( getConnection(), false );
     }
 
     @Override
@@ -110,7 +95,7 @@ public class JdbcStatementManager
         catch ( SQLException ex )
         {
             destroy();
-            
+
             throw new RuntimeException( ex );
         }
     }
@@ -119,11 +104,11 @@ public class JdbcStatementManager
     public void destroy()
     {
         StatementHolder holder = holderTag.get();
-        
+
         if ( holder != null )
         {
             holder.forceClose();
-        
+
             holderTag.remove();
         }
     }
@@ -131,34 +116,24 @@ public class JdbcStatementManager
     @Override
     public JdbcConfiguration getConfiguration()
     {
-        return inMemory ? IN_MEMORY_JDBC_CONFIG : jdbcConfiguration;
+        return jdbcConfiguration;
     }
 
     // -------------------------------------------------------------------------
     // Supportive methods
     // -------------------------------------------------------------------------
-    
-    
-    private static JdbcConfiguration initializeInMemoryJdbcConfig()
-    {
-        JDBCDataSource ds = new JDBCDataSource();
-        ds.setUrl( "jdbc:hsqldb:mem:quick" );
-        ds.setUser( "SA" );
-        ds.setPassword( "" );
-        return new JdbcConfiguration( StatementDialect.HSQL, ds );
-    }
-    
+
     private Connection getConnection()
     {
         return getConnection( getConfiguration() );
     }
-    
+
     private Connection getConnection( JdbcConfiguration config )
     {
         try
-        {            
+        {
             Connection connection = config.getDataSource().getConnection();
-            
+
             return connection;
         }
         catch ( Exception ex )

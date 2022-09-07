@@ -30,16 +30,20 @@ package org.hisp.quick;
 
 /**
  * Interface which represents a SQL statement.
- * 
+ *
  * @author Lars Helge Overland
  */
 public interface Statement
 {
-    final String NUMERIC_COLUMN_TYPE = "integer not null";
-    final String LONG_TEXT_COLUMN_TYPE = "varchar(230)";
-    final String SPACE = " ";
-    final String SEPARATOR = ", ";
-    final String EMPTY = "";
-    
+    String NUMERIC_COLUMN_TYPE = "integer not null";
+
+    String LONG_TEXT_COLUMN_TYPE = "varchar(230)";
+
+    String SPACE = " ";
+
+    String SEPARATOR = ", ";
+
+    String EMPTY = "";
+
     String getStatement();
 }

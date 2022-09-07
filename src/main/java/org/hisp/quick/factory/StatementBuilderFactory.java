@@ -31,7 +31,6 @@ package org.hisp.quick.factory;
 import org.hisp.quick.StatementBuilder;
 import org.hisp.quick.StatementDialect;
 import org.hisp.quick.batchhandler.AbstractBatchHandler;
-import org.hisp.quick.statementbuilder.DerbyStatementBuilder;
 import org.hisp.quick.statementbuilder.H2StatementBuilder;
 import org.hisp.quick.statementbuilder.HsqlStatementBuilder;
 import org.hisp.quick.statementbuilder.MySqlStatementBuilder;
@@ -39,40 +38,37 @@ import org.hisp.quick.statementbuilder.PostgreSqlStatementBuilder;
 
 /**
  * Factory class for creating statement builders.
- * 
+ *
  * @author Lars Helge Overland
  */
 public class StatementBuilderFactory
 {
     /**
      * Creates a StatementBuilder instance.
-     * 
+     *
      * @param dialect the dialect of the StatementBuilder to create.
      * @param batchHandler the batch handler.
      * @param <T> the BatchHandler class.
      * @return a StatementBuilder instance.
      */
-    public static <T> StatementBuilder<T> createStatementBuilder( StatementDialect dialect, AbstractBatchHandler<T> batchHandler )
+    public static <T> StatementBuilder<T> createStatementBuilder(
+        StatementDialect dialect, AbstractBatchHandler<T> batchHandler )
     {
         if ( dialect.equals( StatementDialect.MYSQL ) )
         {
-            return new MySqlStatementBuilder<T>( batchHandler );
+            return new MySqlStatementBuilder<>( batchHandler );
         }
         else if ( dialect.equals( StatementDialect.POSTGRESQL ) )
         {
-            return new PostgreSqlStatementBuilder<T>( batchHandler );
+            return new PostgreSqlStatementBuilder<>( batchHandler );
         }
         else if ( dialect.equals( StatementDialect.H2 ) )
         {
-            return new H2StatementBuilder<T>( batchHandler );
+            return new H2StatementBuilder<>( batchHandler );
         }
         else if ( dialect.equals( StatementDialect.HSQL ) )
         {
-            return new HsqlStatementBuilder<T>( batchHandler );
-        }
-        else if ( dialect.equals( StatementDialect.DERBY ) )
-        {
-            return new DerbyStatementBuilder<T>( batchHandler );
+            return new HsqlStatementBuilder<>( batchHandler );
         }
         else
         {

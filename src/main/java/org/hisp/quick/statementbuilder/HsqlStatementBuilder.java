@@ -34,20 +34,16 @@ import org.hisp.quick.batchhandler.AbstractBatchHandler;
 
 /**
  * HSQL implementation of the StatementBuilder interface.
- * 
+ *
  * @author Lars Helge Overland
  */
 public class HsqlStatementBuilder<T>
     extends AbstractStatementBuilder<T>
 {
-    // -------------------------------------------------------------------------
-    // Constructor
-    // -------------------------------------------------------------------------
-
     public HsqlStatementBuilder( AbstractBatchHandler<T> batchHandler )
     {
         super( batchHandler );
-    }    
+    }
 
     // -------------------------------------------------------------------------
     // AbstractStatementBuilder implementation
@@ -57,21 +53,21 @@ public class HsqlStatementBuilder<T>
     public String getInsertStatementOpening()
     {
         List<String> columns = batchHandler.getColumns();
-        
+
         final StringBuffer buffer = new StringBuffer();
-        
+
         buffer.append( "insert into " + batchHandler.getTableName() + " (" );
-        
+
         for ( String column : columns )
         {
             buffer.append( column + SEPARATOR );
         }
-        
+
         if ( columns.size() > 0 )
         {
             buffer.deleteCharAt( buffer.length() - 1 );
         }
-        
+
         return buffer.append( BRACKET_END + " values " ).toString();
     }
 
@@ -79,21 +75,21 @@ public class HsqlStatementBuilder<T>
     public String getInsertStatementValues( T object )
     {
         List<Object> values = batchHandler.getValues( object );
-        
+
         final StringBuffer buffer = new StringBuffer();
-        
+
         buffer.append( BRACKET_START );
-        
+
         for ( Object value : values )
         {
             buffer.append( defaultEncode( value ) + SEPARATOR );
         }
-        
+
         if ( values.size() > 0 )
         {
             buffer.deleteCharAt( buffer.length() - 1 );
         }
-        
+
         return buffer.append( BRACKET_END + SEPARATOR ).toString();
     }
 

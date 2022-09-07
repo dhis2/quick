@@ -34,22 +34,16 @@ import org.hisp.quick.batchhandler.AbstractBatchHandler;
 
 /**
  * PostgreSQL implementation of the StatementBuilder interface.
- * 
+ *
  * @author Lars Helge Overland
  */
 public class PostgreSqlStatementBuilder<T>
     extends AbstractStatementBuilder<T>
 {
-    public static final String AUTO_INCREMENT = "nextval('hibernate_sequence')";
-    
-    // -------------------------------------------------------------------------
-    // Constructor
-    // -------------------------------------------------------------------------
- 
     public PostgreSqlStatementBuilder( AbstractBatchHandler<T> batchHandler )
     {
         super( batchHandler );
-    }    
+    }
 
     // -------------------------------------------------------------------------
     // AbstractStatementBuilder implementation
@@ -60,26 +54,26 @@ public class PostgreSqlStatementBuilder<T>
     {
         String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
         List<String> columns = batchHandler.getColumns();
-        
+
         final StringBuffer buffer = new StringBuffer();
-        
+
         buffer.append( "insert into " + batchHandler.getTableName() + " (" );
 
         if ( autoIncrementColumn != null )
         {
             buffer.append( autoIncrementColumn + SEPARATOR );
         }
-        
+
         for ( String column : columns )
         {
             buffer.append( column + SEPARATOR );
         }
-        
+
         if ( columns.size() > 0 || autoIncrementColumn != null )
         {
             buffer.deleteCharAt( buffer.length() - 1 );
         }
-        
+
         return buffer.append( BRACKET_END + " values " ).toString();
     }
 
@@ -88,26 +82,26 @@ public class PostgreSqlStatementBuilder<T>
     {
         String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
         List<Object> values = batchHandler.getValues( object );
-        
+
         final StringBuffer buffer = new StringBuffer();
-        
+
         buffer.append( BRACKET_START );
 
         if ( autoIncrementColumn != null )
         {
             buffer.append( "nextval('" + batchHandler.getIdSequenceName() + "')" + SEPARATOR );
         }
-        
+
         for ( Object value : values )
         {
             buffer.append( defaultEncode( value ) + SEPARATOR );
         }
-        
+
         if ( values.size() > 0 || autoIncrementColumn != null )
         {
             buffer.deleteCharAt( buffer.length() - 1 );
         }
-        
+
         return buffer.append( BRACKET_END + SEPARATOR ).toString();
     }
 

@@ -35,14 +35,15 @@ import java.util.HashSet;
 
 /**
  * Object mapper class.
- * 
+ *
  * @author Lars Helge Overland
  */
 public class ObjectMapper<T>
 {
     /**
-     * Retrieves an Object from the argument ResultSet using the argument RowMapper.
-     * 
+     * Retrieves an Object from the argument ResultSet using the argument
+     * RowMapper.
+     *
      * @param resultSet the ResultSet.
      * @param rowMapper the RowMapper.
      * @return an Object.
@@ -58,10 +59,11 @@ public class ObjectMapper<T>
             throw new RuntimeException( "Failed to get object from resultset", ex );
         }
     }
-    
+
     /**
-     * Retrieves a Collection from the argument ResultSet using the argument RowMapper.
-     * 
+     * Retrieves a Collection from the argument ResultSet using the argument
+     * RowMapper.
+     *
      * @param resultSet the ResultSet.
      * @param rowMapper the RowMapper.
      * @return a Collection of objects.
@@ -70,13 +72,13 @@ public class ObjectMapper<T>
     {
         try
         {
-            Collection<T> objects = new HashSet<T>();
-        
+            Collection<T> objects = new HashSet<>();
+
             while ( resultSet.next() )
             {
                 objects.add( rowMapper.mapRow( resultSet ) );
             }
-            
+
             return objects;
         }
         catch ( SQLException ex )

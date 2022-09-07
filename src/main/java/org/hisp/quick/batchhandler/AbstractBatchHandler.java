@@ -106,7 +106,10 @@ public abstract class AbstractBatchHandler<T>
 
             statement = connection.createStatement();
 
-            this.addObjectSqlBuffer.append( statementBuilder.getInsertStatementOpening() ); // Initial opening for addObject
+            this.addObjectSqlBuffer.append( statementBuilder.getInsertStatementOpening() ); // Initial
+                                                                                            // opening
+                                                                                            // for
+                                                                                            // addObject
 
             return this;
         }
@@ -148,7 +151,8 @@ public abstract class AbstractBatchHandler<T>
 
                 log.debug( "Add SQL: " + addObjectSqlBuffer );
 
-                addObjectSqlBuffer = new StringBuffer( MAX_LENGTH ).append( statementBuilder.getInsertStatementOpening() );
+                addObjectSqlBuffer = new StringBuffer( MAX_LENGTH )
+                    .append( statementBuilder.getInsertStatementOpening() );
 
                 addObjectCount = 0;
 
@@ -170,8 +174,7 @@ public abstract class AbstractBatchHandler<T>
     @Override
     public boolean insertObject( T object )
     {
-        String sql =
-            statementBuilder.getInsertStatementOpening() +
+        String sql = statementBuilder.getInsertStatementOpening() +
             statementBuilder.getInsertStatementValues( object );
 
         if ( sql.length() == 0 )
@@ -391,7 +394,7 @@ public abstract class AbstractBatchHandler<T>
      */
     protected List<String> getStringList( String... items )
     {
-        return new ArrayList<String>( Arrays.asList( items ) );
+        return new ArrayList<>( Arrays.asList( items ) );
     }
 
     /**
@@ -402,7 +405,7 @@ public abstract class AbstractBatchHandler<T>
      */
     protected List<Object> getObjectList( Object... items )
     {
-        return new ArrayList<Object>( Arrays.asList( items ) );
+        return new ArrayList<>( Arrays.asList( items ) );
     }
 
     /**
@@ -449,25 +452,29 @@ public abstract class AbstractBatchHandler<T>
     public abstract List<String> getIdentifierColumns();
 
     /**
-     * Returns a list of values matching the unique columns for the given object.
+     * Returns a list of values matching the unique columns for the given
+     * object.
      *
      * @param object the object.
-     * @return a list of values matching the unique columns for the given object.
+     * @return a list of values matching the unique columns for the given
+     *         object.
      */
     public abstract List<Object> getIdentifierValues( T object );
 
     /**
      * Returns a list of unique column names.
      *
-     * @return  a list of unique column names.
+     * @return a list of unique column names.
      */
     public abstract List<String> getUniqueColumns();
 
     /**
-     * Returns a list of values matching the unique columns for the given object.
+     * Returns a list of values matching the unique columns for the given
+     * object.
      *
      * @param object the object.
-     * @return a list of values matching the unique columns for the given object.
+     * @return a list of values matching the unique columns for the given
+     *         object.
      */
     public abstract List<Object> getUniqueValues( T object );
 

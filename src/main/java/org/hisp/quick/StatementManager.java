@@ -28,47 +28,47 @@ package org.hisp.quick;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 /**
  * Interface which provides methods for retrieving StatementHolder interfaces.
- * 
+ *
  * @author Lars Helge Overland
  */
 public interface StatementManager
-{    
+{
     /**
-     * Initalizes a database connection and statement object which can be re-used
-     * for multiple operations.
+     * Initalizes a database connection and statement object which can be
+     * re-used for multiple operations.
      */
     void initialise();
-    
+
     /**
-     * Gets a pre-initialized StatementHolder object. After the initialize() method
-     * is invoked, the StatementHolder provides connection pooling in the sense
-     * that the same underlying Connection and Statement will be used until destroy() 
-     * is invoked.
-     * 
+     * Gets a pre-initialized StatementHolder object. After the initialize()
+     * method is invoked, the StatementHolder provides connection pooling in the
+     * sense that the same underlying Connection and Statement will be used
+     * until destroy() is invoked.
+     *
      * @return a pre-initialized statement object.
      */
     StatementHolder getHolder();
-    
+
     /**
      * Gets a pre-initalized StatementHolder object. This method will always
      * retrieve a new Connection from the database, disregard of initialization.
-     *  
-     * @param autoCommit turn auto-commit on or off for the underlying Connection.
+     *
+     * @param autoCommit turn auto-commit on or off for the underlying
+     *        Connection.
      * @return a pre-initialized statement object.
      */
     StatementHolder getHolder( boolean autoCommit );
-       
+
     /**
      * Closes the StatementHolder object and the underlying database connection.
      */
     void destroy();
-    
+
     /**
      * Returns the current JdbcConfiguration.
-     * 
+     *
      * @return JDBC configuration.
      */
     JdbcConfiguration getConfiguration();

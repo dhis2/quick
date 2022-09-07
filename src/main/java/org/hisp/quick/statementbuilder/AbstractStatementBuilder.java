@@ -40,25 +40,27 @@ import org.hisp.quick.batchhandler.AbstractBatchHandler;
 /**
  * Abstract class to be extended by database specific statement builder
  * implementations.
- * 
+ *
  * @author Lars Helge Overland
  */
 public abstract class AbstractStatementBuilder<T>
     implements StatementBuilder<T>
 {
-    protected AbstractBatchHandler<T> batchHandler = null;    
-    
-    protected final String QUOTE = "'";
-    protected final String NULL = "null";
-    protected final String TRUE = "true";
-    protected final String FALSE = "false";
-    protected final String SEPARATOR = ",";
-    protected final String BRACKET_START = "(";
-    protected final String BRACKET_END = ")";
-    
-    // -------------------------------------------------------------------------
-    // Constructor
-    // -------------------------------------------------------------------------
+    protected AbstractBatchHandler<T> batchHandler = null;
+
+    protected static final String QUOTE = "'";
+
+    protected static final String NULL = "null";
+
+    protected static final String TRUE = "true";
+
+    protected static final String FALSE = "false";
+
+    protected static final String SEPARATOR = ",";
+
+    protected static final String BRACKET_START = "(";
+
+    protected static final String BRACKET_END = ")";
 
     public AbstractStatementBuilder( AbstractBatchHandler<T> batchHandler )
     {
@@ -82,7 +84,7 @@ public abstract class AbstractStatementBuilder<T>
             .append( batchHandler.getTableName() )
             .append( " where " )
             .append( getUniquenessClause( arg ) )
-            .append( ";" ).toString();        
+            .append( ";" ).toString();
     }
 
     @Override
@@ -92,31 +94,31 @@ public abstract class AbstractStatementBuilder<T>
         List<Object> values = batchHandler.getValues( object );
         List<String> identifierColums = batchHandler.getIdentifierColumns();
         List<Object> identifierValues = batchHandler.getIdentifierValues( object );
-        
+
         final StringBuffer buffer = new StringBuffer( "update " + batchHandler.getTableName() + " set " );
-        
+
         for ( int i = 0; i < columns.size(); i++ )
         {
             buffer.append( columns.get( i ) + "=" + defaultEncode( values.get( i ) ) );
-            
+
             if ( i + 1 < columns.size() )
             {
                 buffer.append( SEPARATOR );
             }
         }
-        
+
         buffer.append( " where " );
-        
+
         for ( int i = 0; i < identifierColums.size(); i++ )
         {
             buffer.append( identifierColums.get( i ) + "=" + defaultEncode( identifierValues.get( i ) ) );
-            
-            if ( ( i + 1 ) < identifierColums.size() )
+
+            if ( (i + 1) < identifierColums.size() )
             {
                 buffer.append( " and " );
             }
         }
-        
+
         return buffer.append( ";" ).toString();
     }
 
@@ -125,21 +127,21 @@ public abstract class AbstractStatementBuilder<T>
     {
         List<String> identifierColums = batchHandler.getIdentifierColumns();
         List<Object> identifierValues = batchHandler.getIdentifierValues( object );
-        
-        final StringBuffer buffer = new StringBuffer().
-            append( "delete from " ).append( batchHandler.getTableName() ).append( " where " );
-        
+
+        final StringBuffer buffer = new StringBuffer().append( "delete from " ).append( batchHandler.getTableName() )
+            .append( " where " );
+
         for ( int i = 0; i < identifierColums.size(); i++ )
         {
             buffer.append( identifierColums.get( i ) + "=" + defaultEncode( identifierValues.get( i ) ) );
-            
-            if ( ( i + 1 ) < identifierColums.size() )
+
+            if ( (i + 1) < identifierColums.size() )
             {
                 buffer.append( " and " );
             }
         }
-        
-        return buffer.append( ";" ).toString();            
+
+        return buffer.append( ";" ).toString();
     }
 
     @Override
@@ -157,24 +159,24 @@ public abstract class AbstractStatementBuilder<T>
         List<String> uniqueColumns = batchHandler.getUniqueColumns();
         List<Object> uniqueValues = batchHandler.getUniqueValues( object );
         boolean inclusive = batchHandler.isInclusiveUniqueColumns();
-                
+
         final String operator = inclusive ? " and " : " or ";
-                
+
         final StringBuffer buffer = new StringBuffer();
-        
+
         for ( int i = 0; i < uniqueColumns.size(); i++ )
         {
             buffer.append( uniqueColumns.get( i ) + "=" + defaultEncode( uniqueValues.get( i ) ) );
-            
+
             if ( i + 1 < uniqueColumns.size() )
             {
                 buffer.append( operator );
             }
         }
-                
+
         return buffer.toString();
     }
-        
+
     // -------------------------------------------------------------------------
     // Supportive methods
     // -------------------------------------------------------------------------
@@ -182,11 +184,11 @@ public abstract class AbstractStatementBuilder<T>
     protected final String defaultEncode( Object value )
     {
         String encoded = NULL;
-        
+
         if ( value != null )
         {
             final Class<?> clazz = value.getClass();
-            
+
             if ( clazz.equals( String.class ) )
             {
                 encoded = encodeString( (String) value );
@@ -207,7 +209,7 @@ public abstract class AbstractStatementBuilder<T>
             {
                 encoded = encodeBoolean( (Boolean) value );
             }
-            else if ( clazz.equals( Date.class ) || clazz.equals( java.sql.Date.class ) || 
+            else if ( clazz.equals( Date.class ) || clazz.equals( java.sql.Date.class ) ||
                 clazz.equals( Timestamp.class ) || clazz.equals( Time.class ) )
             {
                 encoded = encodeDate( (Date) value );
@@ -217,7 +219,7 @@ public abstract class AbstractStatementBuilder<T>
                 encoded = (String) value;
             }
         }
-        
+
         return encoded;
     }
 
@@ -232,44 +234,44 @@ public abstract class AbstractStatementBuilder<T>
             value = value.endsWith( "\\" ) ? value.substring( 0, value.length() - 1 ) : value;
             value = value.replaceAll( QUOTE, QUOTE + QUOTE );
         }
-        
+
         return QUOTE + value + QUOTE;
     }
-    
+
     protected String encodeInteger( Integer value )
     {
         return String.valueOf( value );
     }
-    
+
     protected String encodeLong( Long value )
     {
         return String.valueOf( value );
     }
-    
+
     protected String encodeDouble( Double value )
     {
         return String.valueOf( value );
     }
-    
+
     protected String encodeBoolean( Boolean value )
     {
         return value ? TRUE : FALSE;
     }
-    
+
     protected String encodeDate( Date value )
     {
         Calendar cal = Calendar.getInstance();
-        
+
         cal.setTime( value );
-        
+
         int year = cal.get( Calendar.YEAR );
         int month = cal.get( Calendar.MONTH ) + 1;
         int day = cal.get( Calendar.DAY_OF_MONTH );
-        
+
         String yearString = String.valueOf( year );
         String monthString = month < 10 ? "0" + month : String.valueOf( month );
         String dayString = day < 10 ? "0" + day : String.valueOf( day );
-        
+
         return QUOTE + yearString + "-" + monthString + "-" + dayString + QUOTE;
     }
 }
