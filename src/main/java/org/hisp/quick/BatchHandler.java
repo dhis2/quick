@@ -35,7 +35,7 @@ package org.hisp.quick;
  *
  * @author Lars Helge Overland
  */
-public interface BatchHandler<T>
+public interface BatchHandler<T> extends AutoCloseable
 {
     /**
      * Initializes the BatchHandler by acquiring a database connection, creating
@@ -114,4 +114,6 @@ public interface BatchHandler<T>
      * and closing the underlying statement object and the database connection.
      */
     void flush();
+
+    boolean isClosed();
 }

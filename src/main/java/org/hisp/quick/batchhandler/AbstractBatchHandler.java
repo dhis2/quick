@@ -34,6 +34,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,7 +45,7 @@ import org.hisp.quick.StatementBuilder;
 import org.hisp.quick.factory.StatementBuilderFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.util.StringUtils;
+
 
 /**
  * Abstract class to be extended by concrete batch handler implementations.
@@ -69,11 +70,13 @@ public abstract class AbstractBatchHandler<T>
 
     protected StatementBuilder<T> statementBuilder;
 
-    private StringBuffer addObjectSqlBuffer;
+    private StringBuilder addObjectSqlBuffer;
 
     private final Set<String> uniqueObjects = new HashSet<>();
 
     private int addObjectCount = 0;
+
+    private boolean closed = false;
 
     // -------------------------------------------------------------------------
     // Constructor
@@ -101,7 +104,7 @@ public abstract class AbstractBatchHandler<T>
         {
             connection = configuration.getDataSource().getConnection();
 
-            this.addObjectSqlBuffer = new StringBuffer( MAX_LENGTH );
+            this.addObjectSqlBuffer = new StringBuilder( MAX_LENGTH );
             this.addObjectCount = 0;
 
             statement = connection.createStatement();
@@ -151,7 +154,7 @@ public abstract class AbstractBatchHandler<T>
 
                 log.debug( "Add SQL: " + addObjectSqlBuffer );
 
-                addObjectSqlBuffer = new StringBuffer( MAX_LENGTH )
+                addObjectSqlBuffer = new StringBuilder( MAX_LENGTH )
                     .append( statementBuilder.getInsertStatementOpening() );
 
                 addObjectCount = 0;
@@ -303,7 +306,11 @@ public abstract class AbstractBatchHandler<T>
     @Override
     public final void flush()
     {
-        try
+        if (isClosed()) {
+            throw new RuntimeException("Cannot flush a closed connection!");
+        }
+
+        try ( Statement st = statement )
         {
             if ( addObjectSqlBuffer != null && addObjectSqlBuffer.length() > 2 && addObjectCount > 0 )
             {
@@ -311,7 +318,7 @@ public abstract class AbstractBatchHandler<T>
 
                 log.debug( "Flush SQL: " + addObjectSqlBuffer );
 
-                statement.executeUpdate( addObjectSqlBuffer.toString() );
+                st.executeUpdate( addObjectSqlBuffer.toString() );
 
                 addObjectCount = 0;
 
@@ -337,7 +344,7 @@ public abstract class AbstractBatchHandler<T>
     /**
      * Closes the current statement and connection.
      */
-    private void close()
+    public void close()
     {
         if ( statement != null )
         {
@@ -362,6 +369,7 @@ public abstract class AbstractBatchHandler<T>
                 ex.printStackTrace();
             }
         }
+        closed = true;
     }
 
     /**
@@ -378,7 +386,8 @@ public abstract class AbstractBatchHandler<T>
 
         if ( uniqueList != null && !uniqueList.isEmpty() )
         {
-            String uniqueKey = StringUtils.collectionToCommaDelimitedString( uniqueList );
+            List<String> ul  = Collections.singletonList( uniqueList.toString() );
+            String uniqueKey = String.join( ",", ul );
 
             exists = !uniqueObjects.add( uniqueKey );
         }
@@ -513,4 +522,9 @@ public abstract class AbstractBatchHandler<T>
         return "hibernate_sequence";
     }
 
+    /**
+     *
+     * @return Whether the batch handler has already been closed.
+     */
+    public boolean isClosed() { return closed;}
 }
