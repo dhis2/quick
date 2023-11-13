@@ -37,7 +37,7 @@
 
   <scm>
     <connection>scm:git:git@github.com:dhis2/quick.git</connection>
-    <developerConnection>scm:git:git@github.com:dhis2/quick.gitt</developerConnection>
+    <developerConnection>scm:git:git@github.com:dhis2/quick.git</developerConnection>
     <url>git@github.com:dhis2/quick.git</url>
   </scm>
   
