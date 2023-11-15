@@ -310,15 +310,14 @@ public abstract class AbstractBatchHandler<T>
             throw new RuntimeException("Cannot flush a closed connection!");
         }
 
-        try ( Statement st = statement )
-        {
+        try {
             if ( addObjectSqlBuffer != null && addObjectSqlBuffer.length() > 2 && addObjectCount > 0 )
             {
                 addObjectSqlBuffer.deleteCharAt( addObjectSqlBuffer.length() - 1 );
 
                 log.debug( "Flush SQL: " + addObjectSqlBuffer );
 
-                st.executeUpdate( addObjectSqlBuffer.toString() );
+                statement.executeUpdate( addObjectSqlBuffer.toString() );
 
                 addObjectCount = 0;
 
