@@ -38,7 +38,7 @@ package org.hisp.quick;
 public interface BatchHandler<T> extends AutoCloseable
 {
     /**
-     * Initializes the BatchHandler by acquiring a database connection, creating
+     * Initializes the batch handler by acquiring a database connection, creating
      * a statement object and initializing a SQL statement.
      *
      * @return this batch handler.
@@ -53,7 +53,7 @@ public interface BatchHandler<T> extends AutoCloseable
     JdbcConfiguration getConfiguration();
 
     /**
-     * Adds an object to the BatchHandler. Checks if the value is a duplicate,
+     * Adds an object to the batch handler. Checks if the value is a duplicate,
      * i.e. already added to this BatchHandler instance, before adding it.
      *
      * @param object the object to add.
@@ -104,16 +104,20 @@ public interface BatchHandler<T> extends AutoCloseable
      * Returns the number of objects currently added to the batch handler
      * buffer.
      *
-     * @return the number of objects currently added to the batch handler
-     *         buffer.
+     * @return the number of objects currently added.
      */
     int getAddObjectCount();
 
     /**
-     * Flushes the BatchHandler by executing a potential remaining statement,
+     * Flushes the batch handler by executing a potential remaining statement,
      * and closing the underlying statement object and the database connection.
      */
     void flush();
 
+    /**
+     * Indicates whether the batch handler is closed.
+     * 
+     * @return true if the batch handler is closed.
+     */
     boolean isClosed();
 }

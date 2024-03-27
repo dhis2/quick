@@ -29,14 +29,14 @@ package org.hisp.quick;
  */
 
 /**
- * Factory which produces BatchHandler instances.
+ * Factory which produces batch handler instances.
  *
  * @author Lars Helge Overland
  */
 public interface BatchHandlerFactory
 {
     /**
-     * Creates a BatchHandler instance.
+     * Creates a {@link BatchHandler}. instance.
      *
      * @param <T> type.
      * @param clazz the BatchHandler class to create.

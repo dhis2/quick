@@ -72,7 +72,7 @@ public class StatementBuilderFactory
         }
         else
         {
-            throw new RuntimeException( "Unsupported dialect: " + dialect );
+            throw new RuntimeException( String.format( "Unsupported dialect: '%s'", dialect ) );
         }
     }
 }

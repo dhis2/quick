@@ -1,6 +1,7 @@
 package org.hisp.quick.configuration;
 
 import javax.sql.DataSource;
+import org.hisp.quick.BatchHandlerFactory;
 
 /*
  * Copyright (c) 2004-2016, University of Oslo
@@ -32,11 +33,12 @@ import javax.sql.DataSource;
 
 import org.hisp.quick.JdbcConfiguration;
 import org.hisp.quick.StatementDialect;
+import org.hisp.quick.StatementManager;
 import org.springframework.beans.factory.FactoryBean;
 
 /**
  * Simple configurable factory bean that provides JdbcConfiguration instances.
- * This could be injected into the StatementManager and BatchHandlerFactory
+ * This could be injected into the {@link StatementManager} and {@link BatchHandlerFactory}
  * components. Applications may implement their own factory bean providing
  * JdbcConfiguration instances if more customized configuration is needed.
  *
@@ -80,9 +82,9 @@ public class JdbcConfigurationFactoryBean
     {
         JdbcConfiguration configuration = new JdbcConfiguration();
 
-        StatementDialect _dialect = dialect != null ? dialect : StatementDialect.valueOf( dialectName );
+        StatementDialect dl = dialect != null ? dialect : StatementDialect.valueOf( dialectName );
 
-        configuration.setDialect( _dialect );
+        configuration.setDialect( dl );
         configuration.setDataSource( dataSource );
 
         this.configuration = configuration;

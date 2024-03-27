@@ -37,7 +37,7 @@ import java.sql.SQLException;
 public interface RowMapper<T>
 {
     /**
-     * Maps a row from a ResultSet to an object.
+     * Maps a row from a result set to an object.
      *
      * @param resultSet the ResultSet.
      * @return an object.

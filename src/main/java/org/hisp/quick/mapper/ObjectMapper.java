@@ -56,7 +56,7 @@ public class ObjectMapper<T>
         }
         catch ( SQLException ex )
         {
-            throw new RuntimeException( "Failed to get object from resultset", ex );
+            throw new RuntimeException( "Failed to get object from result set", ex );
         }
     }
 
@@ -83,7 +83,7 @@ public class ObjectMapper<T>
         }
         catch ( SQLException ex )
         {
-            throw new RuntimeException( "Failed to get collection from resultset", ex );
+            throw new RuntimeException( "Failed to get collection from result set", ex );
         }
     }
 }

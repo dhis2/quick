@@ -38,13 +38,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hisp.quick.BatchHandler;
 import org.hisp.quick.JdbcConfiguration;
 import org.hisp.quick.StatementBuilder;
 import org.hisp.quick.factory.StatementBuilderFactory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -109,10 +108,7 @@ public abstract class AbstractBatchHandler<T>
 
             statement = connection.createStatement();
 
-            this.addObjectSqlBuffer.append( statementBuilder.getInsertStatementOpening() ); // Initial
-                                                                                            // opening
-                                                                                            // for
-                                                                                            // addObject
+            this.addObjectSqlBuffer.append( statementBuilder.getInsertStatementOpening() );
 
             return this;
         }
