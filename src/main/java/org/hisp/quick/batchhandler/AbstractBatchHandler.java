@@ -247,6 +247,25 @@ public abstract class AbstractBatchHandler<T>
     }
 
     @Override
+    public final void upsertObject( T object )
+    {
+        final String sql = statementBuilder.getUpsertStatement(object);
+
+        log.debug("Upsert SQL: " + sql);
+
+        try
+        {
+            statement.executeUpdate(sql);
+        }
+        catch (SQLException ex)
+        {
+            log.error("Failed to upsert object", ex);
+            close();
+            throw new RuntimeException("Failed to upsert object", ex);
+        }
+    }
+
+    @Override
     public final void deleteObject( T object )
     {
         final String sql = statementBuilder.getDeleteStatement( object );

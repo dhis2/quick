@@ -74,6 +74,8 @@ public interface StatementBuilder<T>
      */
     String getUpdateStatement( T object );
 
+    String getUpsertStatement( T object );
+
     /**
      * Creates a delete SQL statement.
      *

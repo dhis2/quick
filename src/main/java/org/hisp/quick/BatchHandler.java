@@ -85,6 +85,8 @@ public interface BatchHandler<T> extends AutoCloseable
      */
     void updateObject( T object );
 
+    void upsertObject( T object );
+
     /**
      * Deletes an object.
      *

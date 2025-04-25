@@ -33,6 +33,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hisp.quick.StatementBuilder;
 import org.hisp.quick.batchhandler.AbstractBatchHandler;
@@ -120,6 +121,35 @@ public abstract class AbstractStatementBuilder<T>
         }
 
         return buffer.append( ";" ).toString();
+    }
+
+    @Override
+    public String getUpsertStatement( T object ) {
+        List<String> columns = batchHandler.getColumns();
+        List<Object> values = batchHandler.getValues(object);
+        List<String> uniqueColumns = batchHandler.getUniqueColumns();
+
+        StringBuilder sql = new StringBuilder("insert into " + batchHandler.getTableName() + " (");
+
+        sql.append(String.join(",", columns));
+        sql.append(") values (");
+        sql.append(values.stream().map(this::defaultEncode).collect( Collectors.joining(",")));
+        sql.append(")");
+
+        sql.append(" on conflict (");
+        sql.append(String.join(",", uniqueColumns));
+        sql.append(") do update set ");
+
+        for (int i = 0; i < columns.size(); i++) {
+            if (!uniqueColumns.contains(columns.get(i))) {
+                sql.append(columns.get(i)).append("=").append(defaultEncode(values.get(i)));
+                if (i + 1 < columns.size()) sql.append(", ");
+            }
+        }
+
+        sql.append(";");
+
+        return sql.toString();
     }
 
     @Override
