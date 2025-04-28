@@ -63,7 +63,7 @@ public class MySqlStatementBuilder<T>
             buffer.append( column + SEPARATOR );
         }
 
-        if ( columns.size() > 0 )
+        if ( !columns.isEmpty() )
         {
             buffer.deleteCharAt( buffer.length() - 1 );
         }
@@ -85,7 +85,7 @@ public class MySqlStatementBuilder<T>
             buffer.append( defaultEncode( value ) + SEPARATOR );
         }
 
-        if ( values.size() > 0 )
+        if ( !values.isEmpty() )
         {
             buffer.deleteCharAt( buffer.length() - 1 );
         }
@@ -116,7 +116,7 @@ public class MySqlStatementBuilder<T>
             buffer.append( column + " = values(" + column + ")" + SEPARATOR );
         }
 
-        if ( columns.size() > 0 )
+        if ( !columns.isEmpty() )
         {
             buffer.deleteCharAt( buffer.length() - 1 );
         }

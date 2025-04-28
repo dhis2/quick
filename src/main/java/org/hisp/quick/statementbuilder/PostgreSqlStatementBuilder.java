@@ -69,7 +69,7 @@ public class PostgreSqlStatementBuilder<T>
             buffer.append( column + SEPARATOR );
         }
 
-        if ( columns.size() > 0 || autoIncrementColumn != null )
+        if ( !columns.isEmpty() || autoIncrementColumn != null )
         {
             buffer.deleteCharAt( buffer.length() - 1 );
         }
