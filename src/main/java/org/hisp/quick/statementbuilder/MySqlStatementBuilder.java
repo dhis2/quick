@@ -54,21 +54,21 @@ public class MySqlStatementBuilder<T>
     {
         List<String> columns = batchHandler.getColumns();
 
-        final StringBuilder buffer = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
 
-        buffer.append( "insert into " + batchHandler.getTableName() + " (" );
+        builder.append( "insert into " + batchHandler.getTableName() + " (" );
 
         for ( String column : columns )
         {
-            buffer.append( column + SEPARATOR );
+            builder.append( column + SEPARATOR );
         }
 
         if ( !columns.isEmpty() )
         {
-            buffer.deleteCharAt( buffer.length() - 1 );
+            builder.deleteCharAt( builder.length() - 1 );
         }
 
-        return buffer.append( BRACKET_END + " values " ).toString();
+        return builder.append( BRACKET_END + " values " ).toString();
     }
 
     @Override
@@ -76,21 +76,21 @@ public class MySqlStatementBuilder<T>
     {
         List<Object> values = batchHandler.getValues( object );
 
-        final StringBuilder buffer = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
 
-        buffer.append( BRACKET_START );
+        builder.append( BRACKET_START );
 
         for ( Object value : values )
         {
-            buffer.append( defaultEncode( value ) + SEPARATOR );
+            builder.append( defaultEncode( value ) + SEPARATOR );
         }
 
         if ( !values.isEmpty() )
         {
-            buffer.deleteCharAt( buffer.length() - 1 );
+            builder.deleteCharAt( builder.length() - 1 );
         }
 
-        return buffer.append( BRACKET_END + SEPARATOR ).toString();
+        return builder.append( BRACKET_END + SEPARATOR ).toString();
     }
 
     @Override
@@ -102,25 +102,25 @@ public class MySqlStatementBuilder<T>
     @Override
     public String getUpsertStatement( T object )
     {
-        StringBuilder buffer = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-        buffer.append( getInsertStatementOpening() );
-        buffer.append( getInsertStatementValues( object ) );
+        builder.append( getInsertStatementOpening() );
+        builder.append( getInsertStatementValues( object ) );
 
         List<String> columns = batchHandler.getColumns();
 
-        buffer.append( " on duplicate key update " );
+        builder.append( " on duplicate key update " );
 
         for ( String column : columns )
         {
-            buffer.append( column + " = values(" + column + ")" + SEPARATOR );
+            builder.append( column + " = values(" + column + ")" + SEPARATOR );
         }
 
         if ( !columns.isEmpty() )
         {
-            buffer.deleteCharAt( buffer.length() - 1 );
+            builder.deleteCharAt( builder.length() - 1 );
         }
 
-        return buffer.toString();
+        return builder.toString();
     }
 }

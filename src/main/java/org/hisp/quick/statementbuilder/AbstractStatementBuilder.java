@@ -96,31 +96,31 @@ public abstract class AbstractStatementBuilder<T>
         List<String> identifierColums = batchHandler.getIdentifierColumns();
         List<Object> identifierValues = batchHandler.getIdentifierValues( object );
 
-        final StringBuilder buffer = new StringBuilder( "update " + batchHandler.getTableName() + " set " );
+        final StringBuilder builder = new StringBuilder( "update " + batchHandler.getTableName() + " set " );
 
         for ( int i = 0; i < columns.size(); i++ )
         {
-            buffer.append( columns.get( i ) + "=" + defaultEncode( values.get( i ) ) );
+            builder.append( columns.get( i ) + "=" + defaultEncode( values.get( i ) ) );
 
             if ( i + 1 < columns.size() )
             {
-                buffer.append( SEPARATOR );
+                builder.append( SEPARATOR );
             }
         }
 
-        buffer.append( " where " );
+        builder.append( " where " );
 
         for ( int i = 0; i < identifierColums.size(); i++ )
         {
-            buffer.append( identifierColums.get( i ) + "=" + defaultEncode( identifierValues.get( i ) ) );
+            builder.append( identifierColums.get( i ) + "=" + defaultEncode( identifierValues.get( i ) ) );
 
             if ( (i + 1) < identifierColums.size() )
             {
-                buffer.append( " and " );
+                builder.append( " and " );
             }
         }
 
-        return buffer.append( ";" ).toString();
+        return builder.append( ";" ).toString();
     }
 
 
@@ -170,20 +170,20 @@ public abstract class AbstractStatementBuilder<T>
         List<String> identifierColumns = batchHandler.getIdentifierColumns();
         List<Object> identifierValues = batchHandler.getIdentifierValues( object );
 
-        final StringBuilder buffer = new StringBuilder().append( "delete from " ).append( batchHandler.getTableName() )
+        final StringBuilder builder = new StringBuilder().append( "delete from " ).append( batchHandler.getTableName() )
             .append( " where " );
 
         for ( int i = 0; i < identifierColumns.size(); i++ )
         {
-            buffer.append( identifierColumns.get( i ) + "=" + defaultEncode( identifierValues.get( i ) ) );
+            builder.append( identifierColumns.get( i ) + "=" + defaultEncode( identifierValues.get( i ) ) );
 
             if ( (i + 1) < identifierColumns.size() )
             {
-                buffer.append( " and " );
+                builder.append( " and " );
             }
         }
 
-        return buffer.append( ";" ).toString();
+        return builder.append( ";" ).toString();
     }
 
     @Override
@@ -204,19 +204,19 @@ public abstract class AbstractStatementBuilder<T>
 
         final String operator = inclusive ? " and " : " or ";
 
-        final StringBuilder buffer = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
 
         for ( int i = 0; i < uniqueColumns.size(); i++ )
         {
-            buffer.append( uniqueColumns.get( i ) + "=" + defaultEncode( uniqueValues.get( i ) ) );
+            builder.append( uniqueColumns.get( i ) + "=" + defaultEncode( uniqueValues.get( i ) ) );
 
             if ( i + 1 < uniqueColumns.size() )
             {
-                buffer.append( operator );
+                builder.append( operator );
             }
         }
 
-        return buffer.toString();
+        return builder.toString();
     }
 
     // -------------------------------------------------------------------------

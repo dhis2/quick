@@ -104,7 +104,7 @@ public interface BatchHandler<T> extends AutoCloseable
 
     /**
      * Returns the number of objects currently added to the batch handler
-     * buffer.
+     * builder.
      *
      * @return the number of objects currently added.
      */

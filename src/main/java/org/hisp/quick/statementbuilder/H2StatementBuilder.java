@@ -57,26 +57,26 @@ public class H2StatementBuilder<T>
 
         String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
 
-        final StringBuilder buffer = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
 
-        buffer.append( "insert into " + batchHandler.getTableName() + " (" );
+        builder.append( "insert into " + batchHandler.getTableName() + " (" );
 
         if ( autoIncrementColumn != null )
         {
-            buffer.append( autoIncrementColumn + SEPARATOR );
+            builder.append( autoIncrementColumn + SEPARATOR );
         }
 
         for ( String column : columns )
         {
-            buffer.append( column + SEPARATOR );
+            builder.append( column + SEPARATOR );
         }
 
         if ( !columns.isEmpty() || autoIncrementColumn != null )
         {
-            buffer.deleteCharAt( buffer.length() - 1 );
+            builder.deleteCharAt( builder.length() - 1 );
         }
 
-        return buffer.append( BRACKET_END + " values " ).toString();
+        return builder.append( BRACKET_END + " values " ).toString();
     }
 
     @Override
@@ -86,26 +86,26 @@ public class H2StatementBuilder<T>
 
         String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
 
-        final StringBuilder buffer = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
 
-        buffer.append( BRACKET_START );
+        builder.append( BRACKET_START );
 
         if ( autoIncrementColumn != null )
         {
-            buffer.append( "nextval('" + batchHandler.getIdSequenceName() + "')" + SEPARATOR );
+            builder.append( "nextval('" + batchHandler.getIdSequenceName() + "')" + SEPARATOR );
         }
 
         for ( Object value : values )
         {
-            buffer.append( defaultEncode( value ) + SEPARATOR );
+            builder.append( defaultEncode( value ) + SEPARATOR );
         }
 
         if ( values.size() > 0 || autoIncrementColumn != null )
         {
-            buffer.deleteCharAt( buffer.length() - 1 );
+            builder.deleteCharAt( builder.length() - 1 );
         }
 
-        return buffer.append( BRACKET_END + SEPARATOR ).toString();
+        return builder.append( BRACKET_END + SEPARATOR ).toString();
     }
 
     @Override
