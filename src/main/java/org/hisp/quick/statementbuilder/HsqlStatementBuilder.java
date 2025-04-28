@@ -54,21 +54,21 @@ public class HsqlStatementBuilder<T>
     {
         List<String> columns = batchHandler.getColumns();
 
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder builder = new StringBuilder();
 
-        buffer.append( "insert into " + batchHandler.getTableName() + " (" );
+        builder.append( "insert into " + batchHandler.getTableName() + " (" );
 
         for ( String column : columns )
         {
-            buffer.append( column + SEPARATOR );
+            builder.append( column + SEPARATOR );
         }
 
-        if ( columns.size() > 0 )
+        if ( !columns.isEmpty() )
         {
-            buffer.deleteCharAt( buffer.length() - 1 );
+            builder.deleteCharAt( builder.length() - 1 );
         }
 
-        return buffer.append( BRACKET_END + " values " ).toString();
+        return builder.append( BRACKET_END + " values " ).toString();
     }
 
     @Override
@@ -76,21 +76,21 @@ public class HsqlStatementBuilder<T>
     {
         List<Object> values = batchHandler.getValues( object );
 
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder builder = new StringBuilder();
 
-        buffer.append( BRACKET_START );
+        builder.append( BRACKET_START );
 
         for ( Object value : values )
         {
-            buffer.append( defaultEncode( value ) + SEPARATOR );
+            builder.append( defaultEncode( value ) + SEPARATOR );
         }
 
-        if ( values.size() > 0 )
+        if ( !values.isEmpty() )
         {
-            buffer.deleteCharAt( buffer.length() - 1 );
+            builder.deleteCharAt( builder.length() - 1 );
         }
 
-        return buffer.append( BRACKET_END + SEPARATOR ).toString();
+        return builder.append( BRACKET_END + SEPARATOR ).toString();
     }
 
     @Override

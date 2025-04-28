@@ -57,7 +57,7 @@ public class H2StatementBuilder<T>
 
         String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
 
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
 
         buffer.append( "insert into " + batchHandler.getTableName() + " (" );
 
@@ -86,7 +86,7 @@ public class H2StatementBuilder<T>
 
         String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
 
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
 
         buffer.append( BRACKET_START );
 

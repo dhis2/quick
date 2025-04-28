@@ -55,7 +55,7 @@ public class PostgreSqlStatementBuilder<T>
         String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
         List<String> columns = batchHandler.getColumns();
 
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
 
         buffer.append( "insert into " + batchHandler.getTableName() + " (" );
 
@@ -83,7 +83,7 @@ public class PostgreSqlStatementBuilder<T>
         String autoIncrementColumn = batchHandler.getAutoIncrementColumn();
         List<Object> values = batchHandler.getValues( object );
 
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
 
         buffer.append( BRACKET_START );
 

@@ -54,7 +54,7 @@ public class MySqlStatementBuilder<T>
     {
         List<String> columns = batchHandler.getColumns();
 
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
 
         buffer.append( "insert into " + batchHandler.getTableName() + " (" );
 
@@ -76,7 +76,7 @@ public class MySqlStatementBuilder<T>
     {
         List<Object> values = batchHandler.getValues( object );
 
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
 
         buffer.append( BRACKET_START );
 
@@ -102,7 +102,7 @@ public class MySqlStatementBuilder<T>
     @Override
     public String getUpsertStatement( T object )
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         buffer.append( getInsertStatementOpening() );
         buffer.append( getInsertStatementValues( object ) );

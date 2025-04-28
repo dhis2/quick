@@ -81,7 +81,7 @@ public abstract class AbstractStatementBuilder<T>
     @Override
     public String getSelectStatement( T arg )
     {
-        return new StringBuffer( "select * from " )
+        return new StringBuilder( "select * from " )
             .append( batchHandler.getTableName() )
             .append( " where " )
             .append( getUniquenessClause( arg ) )
@@ -96,7 +96,7 @@ public abstract class AbstractStatementBuilder<T>
         List<String> identifierColums = batchHandler.getIdentifierColumns();
         List<Object> identifierValues = batchHandler.getIdentifierValues( object );
 
-        final StringBuffer buffer = new StringBuffer( "update " + batchHandler.getTableName() + " set " );
+        final StringBuilder buffer = new StringBuilder( "update " + batchHandler.getTableName() + " set " );
 
         for ( int i = 0; i < columns.size(); i++ )
         {
@@ -170,7 +170,7 @@ public abstract class AbstractStatementBuilder<T>
         List<String> identifierColumns = batchHandler.getIdentifierColumns();
         List<Object> identifierValues = batchHandler.getIdentifierValues( object );
 
-        final StringBuffer buffer = new StringBuffer().append( "delete from " ).append( batchHandler.getTableName() )
+        final StringBuilder buffer = new StringBuilder().append( "delete from " ).append( batchHandler.getTableName() )
             .append( " where " );
 
         for ( int i = 0; i < identifierColumns.size(); i++ )
@@ -189,7 +189,7 @@ public abstract class AbstractStatementBuilder<T>
     @Override
     public String getUniquenessStatement( T object )
     {
-        return new StringBuffer( "select 1 from " )
+        return new StringBuilder( "select 1 from " )
             .append( batchHandler.getTableName() ).append( " where " )
             .append( getUniquenessClause( object ) )
             .append( ";" ).toString();
@@ -204,7 +204,7 @@ public abstract class AbstractStatementBuilder<T>
 
         final String operator = inclusive ? " and " : " or ";
 
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
 
         for ( int i = 0; i < uniqueColumns.size(); i++ )
         {
