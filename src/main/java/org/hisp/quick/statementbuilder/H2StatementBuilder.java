@@ -1,6 +1,7 @@
 package org.hisp.quick.statementbuilder;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hisp.quick.batchhandler.AbstractBatchHandler;
 
@@ -112,4 +113,26 @@ public class H2StatementBuilder<T>
     {
         return "double";
     }
+
+
+    @Override
+    public String getUpsertStatement(T object)
+    {
+        List<String> columns = batchHandler.getColumns();
+        List<Object> values = batchHandler.getValues(object);
+        List<String> uniqueColumns = batchHandler.getUniqueColumns();
+
+        StringBuilder sql = new StringBuilder("merge into " + batchHandler.getTableName() + " (");
+
+        sql.append(String.join(",", columns));
+        sql.append(") key (");
+        sql.append(String.join(",", uniqueColumns));
+        sql.append(") values (");
+        sql.append(values.stream().map(this::defaultEncode).collect( Collectors.joining(",")));
+        sql.append(")");
+
+        return sql.toString();
+    }
+
+
 }

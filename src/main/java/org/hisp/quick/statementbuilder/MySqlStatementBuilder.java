@@ -98,4 +98,29 @@ public class MySqlStatementBuilder<T>
     {
         return "double";
     }
+
+    @Override
+    public String getUpsertStatement( T object )
+    {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append( getInsertStatementOpening() );
+        buffer.append( getInsertStatementValues( object ) );
+
+        List<String> columns = batchHandler.getColumns();
+
+        buffer.append( " on duplicate key update " );
+
+        for ( String column : columns )
+        {
+            buffer.append( column + " = values(" + column + ")" + SEPARATOR );
+        }
+
+        if ( columns.size() > 0 )
+        {
+            buffer.deleteCharAt( buffer.length() - 1 );
+        }
+
+        return buffer.toString();
+    }
 }

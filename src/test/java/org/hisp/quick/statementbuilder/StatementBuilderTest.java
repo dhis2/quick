@@ -105,4 +105,39 @@ public class StatementBuilderTest
         assertEquals( expUniquenessStatment, builder.getUniquenessStatement( deB ) );
         assertEquals( expDouble, builder.getDoubleColumnType() );
     }
+
+    @Test
+    public void testDataValueH2Statements()
+    {
+        JdbcConfiguration h2JdbcConfig = new JdbcConfiguration(StatementDialect.H2, null);
+
+        AbstractBatchHandler<DataValue> batchHandler = new DataValueBatchHandler(h2JdbcConfig);
+
+        StatementBuilder<DataValue> builder = new H2StatementBuilder<>(batchHandler);
+
+        DataValue dvA = new DataValue(1, 2, 3, "ValueA");
+
+        String expInsert = "insert into datavalue (what,where,when,value) values ";
+        String expInsertNoColumn = "insert into datavalue values ";
+        String expInsertStatementValues = "(1,2,3,'ValueA'),";
+        String expSelectStatement = "select * from datavalue where what=1 and where=2 and when=3;";
+        String expUpdateStatement = "update datavalue set what=1,where=2,when=3,value='ValueA' where what=1 and where=2 and when=3;";
+        String expDeleteStatement = "delete from datavalue where what=1 and where=2 and when=3;";
+        String expUniquenessStatement = "select 1 from datavalue where what=1 and where=2 and when=3;";
+        String expDouble = "double";
+
+        String expUpsert = "merge into datavalue (what,where,when,value) key (what,where,when) values (1,2,3,'ValueA')";
+
+        assertEquals(expInsert, builder.getInsertStatementOpening());
+        assertEquals(expInsertNoColumn, builder.getNoColumnInsertStatementOpening());
+        assertEquals(expInsertStatementValues, builder.getInsertStatementValues(dvA));
+        assertEquals(expSelectStatement, builder.getSelectStatement(dvA));
+        assertEquals(expUpdateStatement, builder.getUpdateStatement(dvA));
+        assertEquals(expDeleteStatement, builder.getDeleteStatement(dvA));
+        assertEquals(expUniquenessStatement, builder.getUniquenessStatement(dvA));
+        assertEquals(expDouble, builder.getDoubleColumnType());
+        assertEquals(expUpsert, builder.getUpsertStatement(dvA));
+    }
+
+
 }

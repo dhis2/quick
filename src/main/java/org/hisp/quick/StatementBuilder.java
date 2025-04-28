@@ -74,6 +74,13 @@ public interface StatementBuilder<T>
      */
     String getUpdateStatement( T object );
 
+    /**
+     * Creates an upsert SQL statement.
+     *
+     *
+     * @param object the object.
+     * @return an upsert SQL statement.
+     */
     String getUpsertStatement( T object );
 
     /**

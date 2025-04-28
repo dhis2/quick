@@ -98,4 +98,13 @@ public class HsqlStatementBuilder<T>
     {
         return "double";
     }
+
+    @Override
+    public String getUpsertStatement( T object )
+    {
+        return getInsertStatementOpening() + 
+            getInsertStatementValues( object ) +
+            " on duplicate key update " +
+            getUpdateStatement( object );
+    }
 }

@@ -246,6 +246,11 @@ public abstract class AbstractBatchHandler<T>
         }
     }
 
+    /**
+     * Upserts the given object.
+     *
+     * @param object the object to upsert.
+     */
     @Override
     public final void upsertObject( T object )
     {

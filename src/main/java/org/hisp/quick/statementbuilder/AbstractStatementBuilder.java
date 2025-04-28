@@ -123,6 +123,18 @@ public abstract class AbstractStatementBuilder<T>
         return buffer.append( ";" ).toString();
     }
 
+
+    /**
+     * Creates an upsert SQL statement.
+     * Note: The statement assumes that the unique columns are the primary key
+     * of the table. If some other primary key exists (such as an auto-incremented surrogate key),
+     * the upsert statement will not
+     * work as expected. In this case, you should instead check for the
+     * existence of the object before inserting it with the surrogate key. If the object
+     * exists, you can proceed as per normal with an update.
+     * @param object the object.
+     * @return an upsert SQL statement.
+     */
     @Override
     public String getUpsertStatement( T object ) {
         List<String> columns = batchHandler.getColumns();
@@ -155,17 +167,17 @@ public abstract class AbstractStatementBuilder<T>
     @Override
     public String getDeleteStatement( T object )
     {
-        List<String> identifierColums = batchHandler.getIdentifierColumns();
+        List<String> identifierColumns = batchHandler.getIdentifierColumns();
         List<Object> identifierValues = batchHandler.getIdentifierValues( object );
 
         final StringBuffer buffer = new StringBuffer().append( "delete from " ).append( batchHandler.getTableName() )
             .append( " where " );
 
-        for ( int i = 0; i < identifierColums.size(); i++ )
+        for ( int i = 0; i < identifierColumns.size(); i++ )
         {
-            buffer.append( identifierColums.get( i ) + "=" + defaultEncode( identifierValues.get( i ) ) );
+            buffer.append( identifierColumns.get( i ) + "=" + defaultEncode( identifierValues.get( i ) ) );
 
-            if ( (i + 1) < identifierColums.size() )
+            if ( (i + 1) < identifierColumns.size() )
             {
                 buffer.append( " and " );
             }
