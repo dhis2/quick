@@ -29,6 +29,6 @@ jobs:
       - name: Release Maven package
         uses: samuelmeuli/action-maven-publish@v1
         with:
-          nexus_username: ${{ secrets.SONATYPE_OSSRH_USERNAME }}
-          nexus_password: ${{ secrets.SONATYPE_OSSRH_PASSWORD }}
+          nexus_username: ${{ secrets.SONATYPE_PORTAL_USERNAME }}
+          nexus_password: ${{ secrets.SONATYPE_PORTAL_PASSWORD }}
           maven_profiles: "branch"
