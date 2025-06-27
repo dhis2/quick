@@ -184,6 +184,7 @@
   <properties>
     <spring.version>5.3.30</spring.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <gpg.skip>true</gpg.skip>
   </properties>
 
 </project>
